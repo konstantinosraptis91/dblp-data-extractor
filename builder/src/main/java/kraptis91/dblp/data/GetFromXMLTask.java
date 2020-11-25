@@ -145,6 +145,7 @@ public class GetFromXMLTask {
         xmlEventReader.next();
       }
     }
+    bis.close();
 
     return yearMap;
   }
