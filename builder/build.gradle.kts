@@ -6,6 +6,13 @@ repositories {
     mavenCentral()
 }
 
+tasks.test {
+    testLogging {
+        outputs.upToDateWhen {false}
+        showStandardStreams = true
+    }
+}
+
 dependencies {
     implementation(project(":model"))
     implementation(project(":schema"))

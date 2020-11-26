@@ -3,6 +3,7 @@ package kraptis91.dblp.data;
 import kraptis91.dblp.data.model.PublicationsPerYearDto;
 import kraptis91.dblp.data.utils.DirectoryUtils;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -28,6 +29,7 @@ public class XMLParserTest {
    *
    * @throws Exception
    */
+  @Ignore
   @Test
   public void testReadNBytesAsString() throws Exception {
 
@@ -53,6 +55,6 @@ public class XMLParserTest {
     // xmlParser.extractPublicationsPerYear(isBigXml);
     PublicationsPerYearDto publicationsPerYearDto =
         xmlParser.extractPublicationsPerYear(isSmallXml);
-    publicationsPerYearDto.printYearMap();
+    publicationsPerYearDto.printYearMapInAscendingOrder();
   }
 }
