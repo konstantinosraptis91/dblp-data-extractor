@@ -1,5 +1,7 @@
 package kraptis91.dblp.data.model;
 
+import jakarta.validation.constraints.NotNull;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -23,12 +25,20 @@ public class PublicationsPerYearDto {
 
   public void printYearMap() {
     System.out.printf("%s %s\n", "Year", "Number of publications");
-    yearMap.forEach((k, v) -> System.out.printf("%s %d\n", k, v));
+    getYearMap().forEach((k, v) -> System.out.printf("%s %d\n", k, v));
+  }
+
+  public void putToYearMap(@NotNull String year) {
+    if (!getYearMap().containsKey(year)) {
+      getYearMap().put(year, 1);
+    } else { // year + 1
+      getYearMap().put(year, getYearMap().get(year) + 1);
+    }
   }
 
   public void printYearMapInAscendingOrder() {
     System.out.printf("%s %s\n", "Year", "Number of publications");
-    yearMap.entrySet().stream()
+    getYearMap().entrySet().stream()
         .sorted(Map.Entry.comparingByKey())
         .collect(
             Collectors.toMap(

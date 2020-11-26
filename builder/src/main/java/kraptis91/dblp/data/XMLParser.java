@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import kraptis91.dblp.data.model.PublicationsPerYearDto;
 import kraptis91.dblp.data.schema.utils.SchemaUtil;
+import kraptis91.dblp.data.utils.InputStreamUtils;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
@@ -30,7 +31,7 @@ public class XMLParser {
   public String readNBytesAsString(@NotNull InputStream xmlStream, @Min(256) int bytesToRead)
       throws IOException {
 
-    InputStream bis = getBufferedInputStream(xmlStream);
+    InputStream bis = InputStreamUtils.getBufferedInputStream(xmlStream);
     StringBuilder stringBuilder = new StringBuilder();
 
     byte[] contents = new byte[bytesToRead];
@@ -52,24 +53,23 @@ public class XMLParser {
   }
 
   /**
-   * Create a Map that has year of publication as key and number of publications as value;
+   * Create the publications per year dto.
    *
    * @param xmlStream
    * @return
    * @throws Exception
    */
-  public Map<String, Integer> extractPublicationsPerYearMap(@NotNull InputStream xmlStream)
+  public PublicationsPerYearDto extractPublicationsPerYear(@NotNull InputStream xmlStream)
       throws Exception {
 
     final QName qName = new QName("year");
-    InputStream bis = getBufferedInputStream(xmlStream);
+    final PublicationsPerYearDto publications = new PublicationsPerYearDto();
+    InputStream bis = InputStreamUtils.getBufferedInputStream(xmlStream);
 
     // create xml event reader for input stream
     XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
     XMLEventReader xmlEventReader = xmlInputFactory.createXMLEventReader(bis);
-
     XMLEvent e = null;
-    final Map<String, Integer> yearMap = new HashMap<>();
 
     // loop though the xml stream
     while ((e = xmlEventReader.peek()) != null) {
@@ -81,13 +81,7 @@ public class XMLParser {
         String year =
             SchemaUtil.getUnmarshaller().unmarshal(xmlEventReader, String.class).getValue();
         // System.out.println(year);
-
-        // Init year to 1 if not in the map
-        if (!yearMap.containsKey(year)) {
-          yearMap.put(year, 1);
-        } else { // year + 1
-          yearMap.put(year, yearMap.get(year) + 1);
-        }
+        publications.putToYearMap(year);
 
       } else {
         xmlEventReader.next();
@@ -96,30 +90,6 @@ public class XMLParser {
     // close stream
     bis.close();
 
-    return yearMap;
-  }
-
-  /**
-   * Create the publications per year dto.
-   *
-   * @param xmlStream
-   * @return
-   * @throws Exception
-   */
-  public PublicationsPerYearDto extractPublicationsPerYear(@NotNull InputStream xmlStream)
-      throws Exception {
-
-    return ModelExtractor.extractPublicationsPerYearDto(extractPublicationsPerYearMap(xmlStream));
-  }
-
-  public static InputStream getBufferedInputStream(@NotNull InputStream xmlStream) {
-
-    InputStream bis;
-    if (xmlStream.markSupported()) {
-      bis = xmlStream;
-    } else {
-      bis = new BufferedInputStream(xmlStream);
-    }
-    return bis;
+    return publications;
   }
 }
