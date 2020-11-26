@@ -1,8 +1,5 @@
 package kraptis91.dblp.data.schema.utils;
 
-import kraptis91.dblp.data.model.Library;
-import kraptis91.dblp.data.model.Publication;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -19,7 +16,7 @@ public final class SchemaUtil {
 
   static {
     try {
-      JAXB_CONTEXT = JAXBContext.newInstance(Library.class, Publication.class);
+      JAXB_CONTEXT = JAXBContext.newInstance();
     } catch (JAXBException e) {
       LOGGER.log(Level.SEVERE, null, e);
       throw new ExceptionInInitializerError(e);
