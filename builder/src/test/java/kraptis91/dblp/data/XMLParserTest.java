@@ -9,18 +9,17 @@ import org.junit.Test;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.Map;
 
 public class XMLParserTest {
 
-  // private InputStream isBigXml;
+//  private InputStream isBigXml;
   private final InputStream isSmallXml =
       XMLParserTest.class.getResourceAsStream("/part-of-xml.xml");
 
   @Before
   public void setUp() throws FileNotFoundException {
-    // isBigXml =
-    //     new FileInputStream(DirectoryUtils.getDefaultDownloadsDirectory() + "/dblp-2020-10-01.xml");
+//    isBigXml =
+//        new FileInputStream(DirectoryUtils.getDefaultDownloadsDirectory() + "/dblp-2020-10-01.xml");
   }
 
   /**
