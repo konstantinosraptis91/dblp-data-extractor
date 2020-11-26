@@ -100,7 +100,7 @@ public class XMLParser {
   }
 
   /**
-   * Create a Map that has year of publication as key and number of publications as value;
+   * Create the publications per year dto.
    *
    * @param xmlStream
    * @return
