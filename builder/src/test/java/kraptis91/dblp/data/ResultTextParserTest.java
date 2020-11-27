@@ -13,7 +13,7 @@ public class ResultTextParserTest {
   InputStream isSlow = ResultTextParserTest.class.getResourceAsStream("/results/slow.txt");
 
   /**
-   * Use this way to read the original "big" xml.
+   * Check if results are the same.
    *
    * @throws Exception
    */
