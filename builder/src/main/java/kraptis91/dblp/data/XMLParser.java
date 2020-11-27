@@ -11,8 +11,10 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 25/11/2020. */
 public class XMLParser {
@@ -50,13 +52,13 @@ public class XMLParser {
   }
 
   /**
-   * Create the publications per year dto.
+   * Create the publications per year dto by using StAX.
    *
    * @param xmlStream
    * @return
    * @throws Exception
    */
-  public PublicationsPerYearDto extractPublicationsPerYear(@NotNull InputStream xmlStream)
+  public PublicationsPerYearDto extractPublicationsPerYearWithStAX(@NotNull InputStream xmlStream)
       throws Exception {
 
     final QName qName = new QName("year");
@@ -86,6 +88,39 @@ public class XMLParser {
     }
     // close stream
     bis.close();
+
+    return publications;
+  }
+
+  /**
+   * Create the publications per year dto by using BufferedReader.
+   *
+   * @param xmlStream
+   * @return
+   * @throws Exception
+   */
+  public PublicationsPerYearDto extractPublicationsPerYear(@NotNull InputStream xmlStream)
+      throws Exception {
+
+    final PublicationsPerYearDto publications = new PublicationsPerYearDto();
+    final BufferedReader bufferedReader =
+        new BufferedReader(new InputStreamReader(xmlStream), 16384);
+
+    String line;
+
+    // loop though the xml stream
+    while ((line = bufferedReader.readLine()) != null) {
+
+      if (line.contains("<year>")) {
+        String year = line.substring(line.indexOf("<year>") + 6, line.indexOf("</year>"));
+        // System.out.println(year);
+        publications.putToYearMap(year);
+      }
+
+      // System.out.println(line);
+    }
+    // close stream
+    bufferedReader.close();
 
     return publications;
   }
