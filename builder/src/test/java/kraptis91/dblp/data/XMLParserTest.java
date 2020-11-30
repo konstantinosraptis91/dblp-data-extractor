@@ -77,7 +77,7 @@ public class XMLParserTest {
    * @throws Exception
    */
   @Test
-  public void testExtractPublicationsPerYearWithRegex() throws Exception {
+  public void testExtractPublicationsPerYearWithAnchors() throws Exception {
 
     XMLParser xmlParser = new XMLParser();
 
