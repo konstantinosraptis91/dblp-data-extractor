@@ -15,6 +15,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /** @author Konstantinos Raptis [kraptis at unipi.gr] on 25/11/2020. */
 public class XMLParser {
@@ -113,6 +115,49 @@ public class XMLParser {
 
       if (line.contains("<year>")) {
         String year = line.substring(line.indexOf("<year>") + 6, line.indexOf("</year>"));
+        // System.out.println(year);
+        publications.putToYearMap(year);
+      }
+
+      // System.out.println(line);
+    }
+    // close stream
+    bufferedReader.close();
+
+    return publications;
+  }
+
+  /**
+   * Create the publications per year dto by using BufferedReader.
+   *
+   * @param xmlStream
+   * @return
+   * @throws Exception
+   */
+  public PublicationsPerYearDto extractPublicationsPerYearWithAnchors(
+      @NotNull InputStream xmlStream) throws Exception {
+
+    final PublicationsPerYearDto publications = new PublicationsPerYearDto();
+    final BufferedReader bufferedReader =
+        new BufferedReader(new InputStreamReader(xmlStream), 16384);
+
+    String line;
+    String startAnchor = "<year>";
+    // String endAnchor = "</year>";
+
+    // loop though the xml stream
+    while ((line = bufferedReader.readLine()) != null) {
+
+      if (line.contains(startAnchor)) {
+        //        String year =
+        //            line.substring(line.indexOf("<year>"), line.indexOf("</year>"))
+        //                .replaceFirst("<year>", "");
+
+        int start = line.indexOf(startAnchor) + startAnchor.length();
+        // int end = line.indexOf(endAnchor);
+        int end = start + 4; // We know that we are looking for years that all are 4 digits.
+        String year = line.substring(start, end);
+
         // System.out.println(year);
         publications.putToYearMap(year);
       }

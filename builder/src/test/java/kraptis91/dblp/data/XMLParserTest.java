@@ -12,14 +12,15 @@ import java.io.InputStream;
 
 public class XMLParserTest {
 
-  // private InputStream isBigXml;
+  //  private InputStream isBigXml;
   private final InputStream isSmallXml =
       XMLParserTest.class.getResourceAsStream("/part-of-xml.xml");
 
   @Before
   public void setUp() throws FileNotFoundException {
-    // isBigXml =
-    //    new FileInputStream(DirectoryUtils.getDefaultDownloadsDirectory() + "/dblp-2020-10-01.xml");
+    //    isBigXml =
+    //        new FileInputStream(DirectoryUtils.getDefaultDownloadsDirectory() +
+    // "/dblp-2020-10-01.xml");
   }
 
   /**
@@ -65,7 +66,23 @@ public class XMLParserTest {
 
     XMLParser xmlParser = new XMLParser();
 
-    PublicationsPerYearDto publicationsPerYearDto = xmlParser.extractPublicationsPerYear(isSmallXml);
+    PublicationsPerYearDto publicationsPerYearDto =
+        xmlParser.extractPublicationsPerYear(isSmallXml);
+    publicationsPerYearDto.printYearMapInAscendingOrder();
+  }
+
+  /**
+   * Use this way to read the original "big" xml.
+   *
+   * @throws Exception
+   */
+  @Test
+  public void testExtractPublicationsPerYearWithRegex() throws Exception {
+
+    XMLParser xmlParser = new XMLParser();
+
+    PublicationsPerYearDto publicationsPerYearDto =
+        xmlParser.extractPublicationsPerYearWithAnchors(isSmallXml);
     publicationsPerYearDto.printYearMapInAscendingOrder();
   }
 }
