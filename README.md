@@ -1,4 +1,4 @@
-This project try to provide a solution on how extract specific data from a "big" XML file with Java. More specifically, the main goal is to extract the number of publications per year from the XML file that is available on the repository below: 
+This project try to provide a solution on how to extract specific data from a "big" XML file with Java. More specifically, the main goal is to extract the number of publications per year from the XML file that is available in the repository below: 
 
 repo: https://dblp.org/xml/release/
 
