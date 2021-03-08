@@ -1,5 +1,24 @@
-# Ignore Gradle project-specific cache directory
-.gradle
+# .idea folder
+.idea/*
+# .gradle folder
+.gradle/**/6.7
+.gradle/*
+# IntelliJ Idea
+out/
 
-# Ignore Gradle build output directory
-build
+**/build/
+
+buildSrc/.gradle
+
+api/all.log
+ms-ais-weather-schema.db
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

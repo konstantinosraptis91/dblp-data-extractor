@@ -1,5 +1,5 @@
 plugins {
-    `java-library`
+    id("dblp-parser.java-library-conventions")
 }
 
 repositories {
