@@ -13,7 +13,7 @@ dependencies {
     // guava
     implementation("com.google.guava:guava:29.0-jre")
     // Apache commons-io
-    implementation("org.apache.commons:commons-lang3:3.11")
+    implementation("org.apache.commons:commons-lang3:3.12.0")
     // config
     implementation("com.typesafe:config:1.4.1")
     // jackson

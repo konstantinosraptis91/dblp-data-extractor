@@ -1,4 +1,4 @@
-rootProject.name = "dblp-parser"
+rootProject.name = "dblp-data-extractor"
 include("builder")
 include("model")
 include("schema")

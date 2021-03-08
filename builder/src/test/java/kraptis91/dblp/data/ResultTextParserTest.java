@@ -1,8 +1,8 @@
 package kraptis91.dblp.data;
 
 import kraptis91.dblp.data.model.PublicationsPerYearDto;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
 
@@ -24,6 +24,6 @@ public class ResultTextParserTest {
     PublicationsPerYearDto fastDto = textParser.parsePublicationsDto(isFast);
     PublicationsPerYearDto slowDto = textParser.parsePublicationsDto(isSlow);
 
-    Assert.assertTrue(fastDto.getYearMap().equals(slowDto.getYearMap()));
+    Assertions.assertEquals(slowDto.getYearMap(), fastDto.getYearMap());
   }
 }

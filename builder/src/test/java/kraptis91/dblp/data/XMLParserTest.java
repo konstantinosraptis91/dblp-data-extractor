@@ -1,12 +1,9 @@
 package kraptis91.dblp.data;
 
 import kraptis91.dblp.data.model.PublicationsPerYearDto;
-import kraptis91.dblp.data.utils.DirectoryUtils;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
@@ -16,7 +13,6 @@ public class XMLParserTest {
   private final InputStream isSmallXml =
       XMLParserTest.class.getResourceAsStream("/part-of-xml.xml");
 
-  @Before
   public void setUp() throws FileNotFoundException {
     //    isBigXml =
     //        new FileInputStream(DirectoryUtils.getDefaultDownloadsDirectory() +
@@ -28,7 +24,7 @@ public class XMLParserTest {
    *
    * @throws Exception
    */
-  @Ignore
+  @Disabled
   @Test
   public void testReadNBytesAsString() throws Exception {
 
@@ -45,7 +41,7 @@ public class XMLParserTest {
    *
    * @throws Exception
    */
-  @Ignore
+  @Disabled
   @Test
   public void testExtractPublicationsPerYearWithStAX() throws Exception {
 
