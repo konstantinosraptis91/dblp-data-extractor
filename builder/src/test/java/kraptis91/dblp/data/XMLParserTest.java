@@ -1,84 +1,112 @@
 package kraptis91.dblp.data;
 
 import kraptis91.dblp.data.model.PublicationsPerYearDto;
+import org.apache.commons.lang3.SystemUtils;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.List;
 
 public class XMLParserTest {
 
-  //  private InputStream isBigXml;
-  private final InputStream isSmallXml =
-      XMLParserTest.class.getResourceAsStream("/part-of-xml.xml");
+    private static InputStream isBigXml;
+    private final InputStream isSmallXml =
+        XMLParserTest.class.getResourceAsStream("/part-of-xml.xml");
 
-  public void setUp() throws FileNotFoundException {
-    //    isBigXml =
-    //        new FileInputStream(DirectoryUtils.getDefaultDownloadsDirectory() +
-    // "/dblp-2020-10-01.xml");
-  }
+    @BeforeAll
+    public static void setUp() throws FileNotFoundException {
+        String fileName = SystemUtils.getUserDir()
+            .getParentFile().getParent() +
+            "/dblp-2021-02-01.xml";
+        System.out.println("FileName: " + fileName);
 
-  /**
-   * Use this way to get a chunk of the "big" xml or read a small xml as String.
-   *
-   * @throws Exception
-   */
-  @Disabled
-  @Test
-  public void testReadNBytesAsString() throws Exception {
+        isBigXml =
+            new FileInputStream(SystemUtils.getUserDir()
+                .getParentFile().getParent() +
+                "/dblp-2021-02-01.xml");
 
-    XMLParser xmlParser = new XMLParser();
+        Assertions.assertNotNull(isBigXml);
+    }
 
-    // String theXML = xmlParser.readNBytesAsString(isBigXml, 1024 * 10);
-    String theXML = xmlParser.readNBytesAsString(isSmallXml, isSmallXml.available());
+    /**
+     * Use this way to get a chunk of the "big" xml or read a small xml as String.
+     *
+     * @throws Exception
+     */
+    // @Disabled
+    @Test
+    public void testReadNBytesAsString() throws Exception {
 
-    System.out.println(theXML);
-  }
+        XMLParser xmlParser = new XMLParser();
 
-  /**
-   * Use this way to read the original "big" xml.
-   *
-   * @throws Exception
-   */
-  @Disabled
-  @Test
-  public void testExtractPublicationsPerYearWithStAX() throws Exception {
+        String theXML = xmlParser.readNBytesAsString(isSmallXml, 1024 * 10);
+        // String theXML = xmlParser.readNBytesAsString(isSmallXml, isSmallXml.available());
 
-    XMLParser xmlParser = new XMLParser();
+        System.out.println(theXML);
+    }
 
-    PublicationsPerYearDto publicationsPerYearDto =
-        xmlParser.extractPublicationsPerYearWithStAX(isSmallXml);
-    publicationsPerYearDto.printYearMapInAscendingOrder();
-  }
+    /**
+     * Use this way to read the original "big" xml.
+     *
+     * @throws Exception
+     */
+    @Disabled
+    @Test
+    public void testExtractPublicationsPerYearWithStAX() throws Exception {
 
-  /**
-   * Use this way to read the original "big" xml.
-   *
-   * @throws Exception
-   */
-  @Test
-  public void testExtractPublicationsPerYear() throws Exception {
+        XMLParser xmlParser = new XMLParser();
 
-    XMLParser xmlParser = new XMLParser();
+        PublicationsPerYearDto publicationsPerYearDto =
+            xmlParser.extractPublicationsPerYearWithStAX(isSmallXml);
+        publicationsPerYearDto.printYearMapInAscendingOrder();
+    }
 
-    PublicationsPerYearDto publicationsPerYearDto =
-        xmlParser.extractPublicationsPerYear(isSmallXml);
-    publicationsPerYearDto.printYearMapInAscendingOrder();
-  }
+    /**
+     * Use this way to read the original "big" xml.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testExtractPublicationsPerYear() throws Exception {
 
-  /**
-   * Use this way to read the original "big" xml.
-   *
-   * @throws Exception
-   */
-  @Test
-  public void testExtractPublicationsPerYearWithAnchors() throws Exception {
+        XMLParser xmlParser = new XMLParser();
 
-    XMLParser xmlParser = new XMLParser();
+        PublicationsPerYearDto publicationsPerYearDto =
+            xmlParser.extractPublicationsPerYear(isSmallXml);
+        publicationsPerYearDto.printYearMapInAscendingOrder();
+    }
 
-    PublicationsPerYearDto publicationsPerYearDto =
-        xmlParser.extractPublicationsPerYearWithAnchors(isSmallXml);
-    publicationsPerYearDto.printYearMapInAscendingOrder();
-  }
+    /**
+     * Use this way to read the original "big" xml.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testExtractPublicationsPerYearWithAnchorsForTextList() throws Exception {
+
+        XMLParser xmlParser = new XMLParser();
+
+        PublicationsPerYearDto publicationsPerYearDto =
+            xmlParser.extractPublicationsPerYearWithAnchorsForTextList(isBigXml,
+                List.of("distributed"));
+        publicationsPerYearDto.printYearMapInAscendingOrder();
+    }
+
+    @Test
+    public void testExtractPublicationsPerYearWithStAXForTextList() throws Exception {
+
+        XMLParser xmlParser = new XMLParser();
+
+        PublicationsPerYearDto dto =
+            xmlParser.extractPublicationsPerYearWithStAXForTextList(isSmallXml,
+            List.of("distributed"));
+        dto.printYearMapInAscendingOrder();
+        dto.printTotalPublications();
+    }
+
 }
