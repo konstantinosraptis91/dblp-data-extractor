@@ -119,6 +119,7 @@ public class XMLParser {
             final XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
             final XMLEventReader xmlEventReader = xmlInputFactory.createXMLEventReader(bis);
             XMLEvent xmlEvent;
+            int discarded = 0;
 
             // loop though the xml stream
             while ((xmlEvent = xmlEventReader.peek()) != null) {
@@ -139,13 +140,15 @@ public class XMLParser {
                         }
                         // System.out.println(publication);
                     } catch (Exception ex) {
-                        LOGGER.error(ex.getMessage());
+                        discarded++;
+                        LOGGER.error(ex.getMessage(), ex);
                     }
 
                 } else {
                     xmlEventReader.next();
                 }
             }
+            System.out.println("Discarded phdthesis: " + discarded);
         }
 
         return dto;
@@ -162,24 +165,28 @@ public class XMLParser {
         throws Exception {
 
         final PublicationsPerYearDto publications = new PublicationsPerYearDto();
-        final BufferedReader bufferedReader =
-            new BufferedReader(new InputStreamReader(xmlStream), 16384);
 
-        String line;
+        try (BufferedReader reader =
+                 new BufferedReader(new InputStreamReader(xmlStream), 16384)) {
 
-        // loop though the xml stream
-        while ((line = bufferedReader.readLine()) != null) {
+            String line;
+            int lines = 0;
 
-            if (line.contains("<year>")) {
-                String year = line.substring(line.indexOf("<year>") + 6, line.indexOf("</year>"));
-                // System.out.println(year);
-                publications.putToYearMap(year);
+            // loop though the xml stream
+            while ((line = reader.readLine()) != null) {
+
+                if (line.contains("<year>")) {
+                    String year = line.substring(line.indexOf("<year>") + 6, line.indexOf("</year>"));
+                    // System.out.println(year);
+                    publications.putToYearMap(year);
+                }
+
+                // System.out.println(line);
+                lines++;
             }
 
-            // System.out.println(line);
+            System.out.println("Total lines: " + lines);
         }
-        // close stream
-        bufferedReader.close();
 
         return publications;
     }
@@ -238,4 +245,103 @@ public class XMLParser {
 
         return publications;
     }
+
+    public int extractTotalLines(@NotNull InputStream xmlStream) throws IOException {
+
+        int lines = 0;
+
+        try (final BufferedReader reader = new BufferedReader(
+            new InputStreamReader(xmlStream), 16384)) {
+
+            while (reader.readLine() != null) {
+                lines++;
+            }
+
+            // System.out.println("Total number of lines: " + lines);
+        }
+
+        return lines;
+    }
+
+    public int extractTotalPublications(@NotNull InputStream xmlStream) throws IOException {
+
+        int publications = 0;
+        String line;
+
+        try (final BufferedReader reader = new BufferedReader(
+            new InputStreamReader(xmlStream), 16384)) {
+
+            while ((line = reader.readLine()) != null) {
+                if (line.contains("<phdthesis")) {
+                    publications++;
+                }
+            }
+
+            // System.out.println("Total number of publications: " + publications);
+        }
+
+        return publications;
+    }
+
+    /**
+     * Create the publications per year dto by using BufferedReader.
+     *
+     * @param xmlStream The xml stream
+     * @return
+     * @throws IOException
+     */
+    public PublicationsPerYearDto extractPublicationsPerYearWithStartAnchorsForTextList(@NotNull InputStream xmlStream,
+                                                                                        @NotEmpty List<String> textList)
+        throws IOException {
+
+        final PublicationsPerYearDto publications = new PublicationsPerYearDto();
+
+        try (final BufferedReader reader = new BufferedReader(
+            new InputStreamReader(xmlStream), 16384)) {
+
+            String line;
+            final String yearStartAnchor = "<year>";
+            final String yearEndAnchor = "</year>";
+            final String titleStartAnchor = "<title>";
+            // final String titleEndAnchor = "</title>";
+            int lines = 0;
+
+            // loop though the xml stream
+            while ((line = reader.readLine()) != null) {
+                lines++;
+                // This is the title line
+                if (line.contains(titleStartAnchor)) {
+
+                    // Check if the title thematic area match
+                    for (String text : textList) {
+
+                        String nextLine;
+                        if (line.toLowerCase().contains(text.toLowerCase())) {
+
+                            // text found, loop more until year start anchor is found
+                            while ((nextLine = reader.readLine()) != null) {
+                                lines++;
+                                if (nextLine.contains(yearStartAnchor)) {
+
+                                    // year start anchor found. Extract year and break
+                                    int yearStart = nextLine.indexOf(yearStartAnchor) + yearStartAnchor.length();
+                                    int yearEnd = nextLine.indexOf(yearEndAnchor);
+                                    String year = nextLine.substring(yearStart, yearEnd);
+                                    publications.putToYearMap(year);
+                                    break;
+                                }
+
+                            }
+
+                            break;
+                        }
+                    }
+                }
+            }
+            System.out.println("Total number of lines: " + lines);
+        }
+
+        return publications;
+    }
+
 }

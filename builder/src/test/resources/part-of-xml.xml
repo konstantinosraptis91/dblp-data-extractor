@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="ISO-8859-1"?><!DOCTYPE dblp SYSTEM "dblp-2019-11-22.dtd">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE dblp SYSTEM "/dblp-2019-11-22.dtd">
 <dblp>
     <phdthesis mdate="2016-05-04" key="phd/dk/Heine2010">
         <author>Carmen Heine</author>
@@ -40,6 +41,9 @@
         <year>1994</year>
         <school>U. C. Berkeley</school>
     </phdthesis>
+
+
+
     <phdthesis mdate="2017-01-06" key="phd/Schiwietz93">
         <author>Michael Schiwietz</author>
         <title>Speicherung und Anfragebearbeitung komplexer Geo-Objekte</title>
@@ -50,6 +54,9 @@
         <isbn>3-86111-723-1</isbn>
         <ee>http://d-nb.info/931737397</ee>
     </phdthesis>
+
+
+
     <phdthesis mdate="2020-03-12" key="phd/Beferull-Lozano02">
         <author>Baltasar Beferull-Lozano</author>
         <title>Quantization Design for Structured Overcomplete Expansions.</title>
@@ -63,6 +70,8 @@
         <year>1994</year>
         <school>Departement Informatik, ETH Z&uuml;rich</school>
     </phdthesis>
+
+
     <phdthesis mdate="2016-09-05" key="phd/ethos/Charters06">
         <author>Stuart M. Charters</author>
         <title>Virtualising visualisation : a distributed service based approach to visualisation on the Grid.</title>
@@ -111,6 +120,15 @@
         <school>University of Hull, Kingston upon Hull, UK</school>
         <ee>http://hydra.hull.ac.uk/resources/hull:13615</ee>
         <ee>http://ethos.bl.uk/OrderDetails.do?uin=uk.bl.ethos.272472</ee>
+        <note type="source">British Library, EThOS</note>
+    </phdthesis>
+    <phdthesis mdate="2020-12-23" key="phd/ethos/Amen18">
+        <author>Bakhtiar Amen</author>
+        <title>Distributed contextual anomaly detection from big event streams.</title>
+        <year>2018</year>
+        <school>University of Huddersfield, UK</school>
+        <ee>http://ethos.bl.uk/OrderDetails.do?uin=uk.bl.ethos.762029</ee>
+        <ee>http://eprints.hud.ac.uk/id/eprint/34687/</ee>
         <note type="source">British Library, EThOS</note>
     </phdthesis>
     <phdthesis mdate="2016-08-31" key="phd/ethos/Brown08">
@@ -194,9 +212,7 @@
         <year>2018</year>
         <school>King's College London, UK</school>
         <ee>http://ethos.bl.uk/OrderDetails.do?uin=uk.bl.ethos.739994</ee>
-        <ee>
-            https://kclpure.kcl.ac.uk/portal/en/theses/screw-algebra-based-kinematics-analysis-and-its-uses-in-reconfiguration-recognition-of-mechanisms(cb12c87e-ff15-45bf-97db-08565ee38a5f).html
-        </ee>
+        <ee>https://kclpure.kcl.ac.uk/portal/en/theses/screw-algebra-based-kinematics-analysis-and-its-uses-in-reconfiguration-recognition-of-mechanisms(cb12c87e-ff15-45bf-97db-08565ee38a5f).html</ee>
         <note type="source">British Library, EThOS</note>
     </phdthesis>
     <phdthesis mdate="2016-08-11" key="phd/ethos/Officer72">
@@ -215,15 +231,6 @@
         <school>University of Warwick, Coventry, UK</school>
         <ee>http://wrap.warwick.ac.uk/55706/</ee>
         <ee>http://ethos.bl.uk/OrderDetails.do?uin=uk.bl.ethos.582194</ee>
-        <note type="source">British Library, EThOS</note>
-    </phdthesis>
-    <phdthesis mdate="2016-10-10" key="phd/ethos/Dunne84">
-        <author>Paul E. Dunne</author>
-        <title>Techniques for the analysis of monotone Boolean networks.</title>
-        <year>1984</year>
-        <school>University of Warwick, Coventry, UK</school>
-        <ee>http://wrap.warwick.ac.uk/60767/</ee>
-        <ee>http://ethos.bl.uk/OrderDetails.do?uin=uk.bl.ethos.353145</ee>
         <note type="source">British Library, EThOS</note>
     </phdthesis>
 </dblp>

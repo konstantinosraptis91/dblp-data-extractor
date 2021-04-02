@@ -17,6 +17,8 @@ public class XMLParserTest {
     private static InputStream isBigXml;
     private final InputStream isSmallXml =
         XMLParserTest.class.getResourceAsStream("/part-of-xml.xml");
+    private final InputStream isBiggerXml =
+        XMLParserTest.class.getResourceAsStream("/isBigger.xml");
 
     @BeforeAll
     public static void setUp() throws FileNotFoundException {
@@ -44,7 +46,7 @@ public class XMLParserTest {
 
         XMLParser xmlParser = new XMLParser();
 
-        String theXML = xmlParser.readNBytesAsString(isSmallXml, 1024 * 10);
+        String theXML = xmlParser.readNBytesAsString(isBigXml, 1024 * 10 * 100);
         // String theXML = xmlParser.readNBytesAsString(isSmallXml, isSmallXml.available());
 
         System.out.println(theXML);
@@ -77,7 +79,7 @@ public class XMLParserTest {
         XMLParser xmlParser = new XMLParser();
 
         PublicationsPerYearDto publicationsPerYearDto =
-            xmlParser.extractPublicationsPerYear(isSmallXml);
+            xmlParser.extractPublicationsPerYear(isBigXml);
         publicationsPerYearDto.printYearMapInAscendingOrder();
     }
 
@@ -92,7 +94,7 @@ public class XMLParserTest {
         XMLParser xmlParser = new XMLParser();
 
         PublicationsPerYearDto publicationsPerYearDto =
-            xmlParser.extractPublicationsPerYearWithAnchorsForTextList(isBigXml,
+            xmlParser.extractPublicationsPerYearWithAnchorsForTextList(isSmallXml,
                 List.of("distributed"));
         publicationsPerYearDto.printYearMapInAscendingOrder();
     }
@@ -103,10 +105,40 @@ public class XMLParserTest {
         XMLParser xmlParser = new XMLParser();
 
         PublicationsPerYearDto dto =
-            xmlParser.extractPublicationsPerYearWithStAXForTextList(isSmallXml,
+            xmlParser.extractPublicationsPerYearWithStAXForTextList(isBiggerXml,
             List.of("distributed"));
         dto.printYearMapInAscendingOrder();
         dto.printTotalPublications();
+    }
+
+    @Test
+    public void testExtractPublicationsPerYearWithStartAnchorsForTextList() throws Exception {
+
+        XMLParser xmlParser = new XMLParser();
+
+        PublicationsPerYearDto dto =
+            xmlParser.extractPublicationsPerYearWithStartAnchorsForTextList(isBiggerXml,
+                List.of("distributed"));
+        dto.printYearMapInAscendingOrder();
+        dto.printTotalPublications();
+    }
+
+    @Test
+    public void testExtractTotalLines() throws Exception {
+
+        XMLParser xmlParser = new XMLParser();
+
+        int lines = xmlParser.extractTotalLines(isBigXml);
+        System.out.println("Total number of lines: " + lines);
+    }
+
+    @Test
+    public void testExtractTotalPublications() throws Exception {
+
+        XMLParser xmlParser = new XMLParser();
+
+        int phdthesis = xmlParser.extractTotalPublications(isBigXml);
+        System.out.println("Total number of phdthesis: " + phdthesis);
     }
 
 }
