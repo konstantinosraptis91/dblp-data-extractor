@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           targetNamespace="http://kraptis91.com"
+            xmlns:kr="http://kraptis91.com">
+    <xs:element name="dblp">
+        <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="kr:article"/>
+                <xs:element ref="kr:inproceedings"/>
+                <xs:element ref="kr:proceedings"/>
+                <xs:element ref="kr:book"/>
+                <xs:element ref="kr:incollection"/>
+                <xs:element ref="kr:phdthesis"/>
+                <xs:element ref="kr:mastersthesis"/>
+                <xs:element ref="kr:www"/>
+                <xs:element ref="kr:person"/>
+                <xs:element ref="kr:data"/>
+            </xs:choice>
+            <xs:attribute name="mdate"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="field" abstract="true"/>
+    <xs:element name="article">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="kr:field"/>
+            </xs:sequence>
+            <xs:attribute name="key" use="required"/>
+            <xs:attribute name="mdate"/>
+            <xs:attribute name="publtype"/>
+            <xs:attribute name="reviewid"/>
+            <xs:attribute name="rating"/>
+            <xs:attribute name="cdate"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="inproceedings">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="kr:field"/>
+            </xs:sequence>
+            <xs:attribute name="key" use="required"/>
+            <xs:attribute name="mdate"/>
+            <xs:attribute name="publtype"/>
+            <xs:attribute name="cdate"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="proceedings">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="kr:field"/>
+            </xs:sequence>
+            <xs:attribute name="key" use="required"/>
+            <xs:attribute name="mdate"/>
+            <xs:attribute name="publtype"/>
+            <xs:attribute name="cdate"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="book">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="kr:field"/>
+            </xs:sequence>
+            <xs:attribute name="key" use="required"/>
+            <xs:attribute name="mdate"/>
+            <xs:attribute name="publtype"/>
+            <xs:attribute name="cdate"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="incollection">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="kr:field"/>
+            </xs:sequence>
+            <xs:attribute name="key" use="required"/>
+            <xs:attribute name="mdate"/>
+            <xs:attribute name="publtype"/>
+            <xs:attribute name="cdate"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="phdthesis">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="kr:field"/>
+            </xs:sequence>
+            <xs:attribute name="key" use="required"/>
+            <xs:attribute name="mdate"/>
+            <xs:attribute name="publtype"/>
+            <xs:attribute name="cdate"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="mastersthesis">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="kr:field"/>
+            </xs:sequence>
+            <xs:attribute name="key" use="required"/>
+            <xs:attribute name="mdate"/>
+            <xs:attribute name="publtype"/>
+            <xs:attribute name="cdate"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="www">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="kr:field"/>
+            </xs:sequence>
+            <xs:attribute name="key" use="required"/>
+            <xs:attribute name="mdate"/>
+            <xs:attribute name="publtype"/>
+            <xs:attribute name="cdate"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="data">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="kr:field"/>
+            </xs:sequence>
+            <xs:attribute name="key" use="required"/>
+            <xs:attribute name="mdate"/>
+            <xs:attribute name="publtype"/>
+            <xs:attribute name="cdate"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="person">
+        <xs:complexType>
+            <xs:choice>
+                <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" ref="kr:author"/>
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                        <xs:element ref="kr:note"/>
+                        <xs:element ref="kr:url"/>
+                        <xs:element ref="kr:cite"/>
+                    </xs:choice>
+                </xs:sequence>
+                <xs:element ref="kr:crossref"/>
+            </xs:choice>
+            <xs:attribute name="key" use="required"/>
+            <xs:attribute name="mdate"/>
+            <xs:attribute name="cdate"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="author" substitutionGroup="kr:field">
+        <xs:complexType mixed="true">
+            <xs:attribute name="aux"/>
+            <xs:attribute name="bibtex"/>
+            <xs:attribute name="orcid"/>
+            <xs:attribute name="label"/>
+            <xs:attribute name="type"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="editor" substitutionGroup="kr:field">
+        <xs:complexType mixed="true">
+            <xs:attribute name="aux"/>
+            <xs:attribute name="orcid"/>
+            <xs:attribute name="label"/>
+            <xs:attribute name="type"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="address" substitutionGroup="kr:field">
+        <xs:complexType mixed="true">
+            <xs:attribute name="aux"/>
+            <xs:attribute name="label"/>
+            <xs:attribute name="type"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:group name="titlecontents">
+        <xs:sequence>
+            <xs:choice minOccurs="0">
+                <xs:element ref="kr:sub"/>
+                <xs:element ref="kr:sup"/>
+                <xs:element ref="kr:i"/>
+                <xs:element ref="kr:tt"/>
+                <xs:element ref="kr:ref"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:group>
+    <xs:element name="title" substitutionGroup="kr:field">
+        <xs:complexType mixed="true">
+            <xs:group minOccurs="0" maxOccurs="unbounded" ref="kr:titlecontents"/>
+            <xs:attribute name="bibtex"/>
+            <xs:attribute name="aux"/>
+            <xs:attribute name="label"/>
+            <xs:attribute name="type"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="booktitle" substitutionGroup="kr:field">
+        <xs:complexType mixed="true">
+            <xs:attribute name="aux"/>
+            <xs:attribute name="label"/>
+            <xs:attribute name="type"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="pages" substitutionGroup="kr:field">
+        <xs:complexType mixed="true">
+            <xs:attribute name="aux"/>
+            <xs:attribute name="label"/>
+            <xs:attribute name="type"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="year" substitutionGroup="kr:field">
+        <xs:complexType mixed="true">
+            <xs:attribute name="aux"/>
+            <xs:attribute name="label"/>
+            <xs:attribute name="type"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="journal" substitutionGroup="kr:field">
+        <xs:complexType mixed="true">
+            <xs:attribute name="aux"/>
+            <xs:attribute name="label"/>
+            <xs:attribute name="type"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="volume" substitutionGroup="kr:field">
+        <xs:complexType mixed="true">
+            <xs:attribute name="aux"/>
+            <xs:attribute name="label"/>
+            <xs:attribute name="type"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="number" substitutionGroup="kr:field">
+        <xs:complexType mixed="true">
+            <xs:attribute name="aux"/>
+            <xs:attribute name="label"/>
+            <xs:attribute name="type"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="month" substitutionGroup="kr:field">
+        <xs:complexType mixed="true">
+            <xs:attribute name="aux"/>
+            <xs:attribute name="label"/>
+            <xs:attribute name="type"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="url" substitutionGroup="kr:field">
+        <xs:complexType mixed="true">
+            <xs:attribute name="aux"/>
+            <xs:attribute name="label"/>
+            <xs:attribute name="type"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="ee" substitutionGroup="kr:field">
+        <xs:complexType mixed="true">
+            <xs:attribute name="aux"/>
+            <xs:attribute name="label"/>
+            <xs:attribute name="type"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="cite" substitutionGroup="kr:field">
+        <xs:complexType mixed="true">
+            <xs:attribute name="aux"/>
+            <xs:attribute name="label"/>
+            <xs:attribute name="type"/>
+            <xs:attribute name="ref"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="school" substitutionGroup="kr:field">
+        <xs:complexType mixed="true">
+            <xs:attribute name="aux"/>
+            <xs:attribute name="label"/>
+            <xs:attribute name="type"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="publisher" substitutionGroup="kr:field">
+        <xs:complexType mixed="true">
+            <xs:attribute name="href"/>
+            <xs:attribute name="aux"/>
+            <xs:attribute name="label"/>
+            <xs:attribute name="type"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="note" substitutionGroup="kr:field">
+        <xs:complexType mixed="true">
+            <xs:attribute name="aux"/>
+            <xs:attribute name="label"/>
+            <xs:attribute name="type"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="cdrom" substitutionGroup="kr:field" type="xs:string"/>
+    <xs:element name="crossref" substitutionGroup="kr:field" type="xs:string"/>
+    <xs:element name="isbn" substitutionGroup="kr:field">
+        <xs:complexType mixed="true">
+            <xs:attribute name="aux"/>
+            <xs:attribute name="label"/>
+            <xs:attribute name="type"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="chapter" substitutionGroup="kr:field" type="xs:string"/>
+    <xs:element name="series" substitutionGroup="kr:field">
+        <xs:complexType mixed="true">
+            <xs:attribute name="href"/>
+            <xs:attribute name="aux"/>
+            <xs:attribute name="label"/>
+            <xs:attribute name="type"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="publnr" substitutionGroup="kr:field">
+        <xs:complexType mixed="true">
+            <xs:attribute name="aux"/>
+            <xs:attribute name="label"/>
+            <xs:attribute name="type"/>
+        </xs:complexType>
+    </xs:element>
+    <!-- sub elements of the title element -->
+    <xs:element name="ref">
+        <xs:complexType mixed="true">
+            <xs:attribute name="href" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="sup">
+        <xs:complexType mixed="true">
+            <xs:group minOccurs="0" maxOccurs="unbounded" ref="kr:titlecontents"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="sub">
+        <xs:complexType mixed="true">
+            <xs:group minOccurs="0" maxOccurs="unbounded" ref="kr:titlecontents"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="i">
+        <xs:complexType mixed="true">
+            <xs:group minOccurs="0" maxOccurs="unbounded" ref="kr:titlecontents"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="tt">
+        <xs:complexType mixed="true">
+            <xs:group minOccurs="0" maxOccurs="unbounded" ref="kr:titlecontents"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

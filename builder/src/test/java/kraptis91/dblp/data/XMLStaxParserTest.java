@@ -58,4 +58,16 @@ public class XMLStaxParserTest {
         System.out.println("Total number of phdthesis: " + phdthesis);
     }
 
+    @Test
+    public void testExtractPublicationsPerYearWithStAXForTextList2() throws Exception {
+
+        XMLStaxParser xmlParser = new XMLStaxParser();
+
+        PublicationsPerYearDto dto =
+            xmlParser.extractPublicationsPerYearWithStAXForTextList2(isBiggerXml,
+                List.of("distributed"));
+        dto.printYearMapInAscendingOrder();
+        dto.printTotalPublications();
+    }
+
 }

@@ -1,4 +1,4 @@
-package kraptis91.dblp.data.model.internal;
+package kraptis91.dblp.data.model.schema;
 
 import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.Objects;
 @XmlRootElement(name = "phdthesis")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder = {"author", "title", "year", "school", "pages", "isbn", "eeList", "note"})
-public class Publication {
+public class PhdThesis {
 
     @XmlAttribute(name = "mdate")
     private String mDate;
@@ -34,7 +34,7 @@ public class Publication {
     @XmlElement
     private Note note;
 
-    public Publication() {
+    public PhdThesis() {
 
     }
 

@@ -99,17 +99,7 @@ public class XMLParserTest {
         publicationsPerYearDto.printYearMapInAscendingOrder();
     }
 
-    @Test
-    public void testExtractPublicationsPerYearWithStAXForTextList() throws Exception {
 
-        XMLParser xmlParser = new XMLParser();
-
-        PublicationsPerYearDto dto =
-            xmlParser.extractPublicationsPerYearWithStAXForTextList(isBiggerXml,
-            List.of("distributed"));
-        dto.printYearMapInAscendingOrder();
-        dto.printTotalPublications();
-    }
 
     @Test
     public void testExtractPublicationsPerYearWithStartAnchorsForTextList() throws Exception {
@@ -117,7 +107,7 @@ public class XMLParserTest {
         XMLParser xmlParser = new XMLParser();
 
         PublicationsPerYearDto dto =
-            xmlParser.extractPublicationsPerYearWithStartAnchorsForTextList(isBiggerXml,
+            xmlParser.extractPublicationsPerYearWithStartAnchorsForTextList(isBigXml,
                 List.of("distributed"));
         dto.printYearMapInAscendingOrder();
         dto.printTotalPublications();

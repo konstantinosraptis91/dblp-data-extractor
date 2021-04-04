@@ -1,4 +1,4 @@
-package kraptis91.dblp.data.model.internal;
+package kraptis91.dblp.data.model.schema;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

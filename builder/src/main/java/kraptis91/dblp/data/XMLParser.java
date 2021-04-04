@@ -4,7 +4,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import kraptis91.dblp.data.model.PublicationsPerYearDto;
-import kraptis91.dblp.data.model.internal.Publication;
 import kraptis91.dblp.data.schema.utils.SchemaUtil;
 import kraptis91.dblp.data.utils.InputStreamUtils;
 import org.slf4j.Logger;
@@ -98,61 +97,7 @@ public class XMLParser {
         return publications;
     }
 
-    /**
-     * Create the publications per year dto by using StAX.
-     *
-     * @param xmlStream
-     * @return
-     * @throws Exception
-     */
-    public PublicationsPerYearDto extractPublicationsPerYearWithStAXForTextList(@NotNull InputStream xmlStream,
-                                                                                @NotEmpty List<String> textList)
-        throws Exception {
 
-        final QName pubQName = new QName("phdthesis");
-
-        final PublicationsPerYearDto dto = new PublicationsPerYearDto();
-
-        try (BufferedInputStream bis = new BufferedInputStream(xmlStream)) {
-
-            // create xml event reader for input stream
-            final XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
-            final XMLEventReader xmlEventReader = xmlInputFactory.createXMLEventReader(bis);
-            XMLEvent xmlEvent;
-            int discarded = 0;
-
-            // loop though the xml stream
-            while ((xmlEvent = xmlEventReader.peek()) != null) {
-
-                // check the event is a Document start element
-                if (xmlEvent.isStartElement() && ((StartElement) xmlEvent).getName().equals(pubQName)) {
-
-                    try {
-                        // unmarshall the publication value
-                        final Publication publication = SchemaUtil.getUnmarshaller()
-                            .unmarshal(xmlEventReader, Publication.class).getValue();
-
-                        for (String text : textList) {
-                            if (publication.getTitle().contains(text)) {
-                                dto.putToYearMap(publication.getYear());
-                                break;
-                            }
-                        }
-                        // System.out.println(publication);
-                    } catch (Exception ex) {
-                        discarded++;
-                        LOGGER.error(ex.getMessage(), ex);
-                    }
-
-                } else {
-                    xmlEventReader.next();
-                }
-            }
-            System.out.println("Discarded phdthesis: " + discarded);
-        }
-
-        return dto;
-    }
 
     /**
      * Create the publications per year dto by using BufferedReader.
