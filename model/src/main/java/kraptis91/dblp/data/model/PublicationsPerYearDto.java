@@ -2,9 +2,7 @@ package kraptis91.dblp.data.model;
 
 import jakarta.validation.constraints.NotNull;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -13,6 +11,11 @@ import java.util.stream.Collectors;
 public class PublicationsPerYearDto {
 
     private Map<String, Integer> yearMap;
+    private Publications publications;
+
+    public PublicationsPerYearDto() {
+
+    }
 
     public void setYearMap(Map<String, Integer> yearMap) {
         this.yearMap = yearMap;
@@ -23,6 +26,23 @@ public class PublicationsPerYearDto {
             yearMap = new HashMap<>();
         }
         return yearMap;
+    }
+
+    public void addPublication(Publication publication) {
+        getPublications()
+            .getPublicationList()
+            .add(publication);
+    }
+
+    public Publications getPublications() {
+        if (Objects.isNull(publications)) {
+            publications = new Publications();
+        }
+        return publications;
+    }
+
+    public List<Publication> getPublicationList() {
+        return getPublications().getPublicationList();
     }
 
     public void printYearMap() {
@@ -60,4 +80,18 @@ public class PublicationsPerYearDto {
         System.out.printf("%s %s\n", "Year", "Number of publications");
         yearMap.forEach((k, v) -> System.out.printf("%s %d\n", k, v));
     }
+
+    public void printCSV() {
+        System.out.printf("%s,%s\n", "year", "pn");
+        getYearMap().entrySet().stream()
+            .sorted(Map.Entry.comparingByKey())
+            .collect(
+                Collectors.toMap(
+                    Map.Entry::getKey,
+                    Map.Entry::getValue,
+                    (oldValue, newValue) -> oldValue,
+                    LinkedHashMap::new))
+            .forEach((k, v) -> System.out.printf("%s,%d\n", k, v));
+    }
+
 }

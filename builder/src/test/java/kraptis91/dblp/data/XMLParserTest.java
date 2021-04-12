@@ -1,6 +1,7 @@
 package kraptis91.dblp.data;
 
 import kraptis91.dblp.data.model.PublicationsPerYearDto;
+import kraptis91.dblp.data.schema.utils.SchemaUtil;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.List;
 
@@ -46,10 +48,18 @@ public class XMLParserTest {
 
         XMLParser xmlParser = new XMLParser();
 
-        String theXML = xmlParser.readNBytesAsString(isBigXml, 1024 * 10 * 100);
+        String theXML = xmlParser.readNBytesAsString(isBigXml, 1024 * 100 * 1000);
         // String theXML = xmlParser.readNBytesAsString(isSmallXml, isSmallXml.available());
 
         System.out.println(theXML);
+    }
+
+    @Test
+    public void testPrintLinesAfterStartAnchor() throws Exception {
+
+        XMLParser xmlParser = new XMLParser();
+
+        xmlParser.printLinesAfterStartAnchor(isBigXml);
     }
 
     /**
@@ -99,8 +109,6 @@ public class XMLParserTest {
         publicationsPerYearDto.printYearMapInAscendingOrder();
     }
 
-
-
     @Test
     public void testExtractPublicationsPerYearWithStartAnchorsForTextList() throws Exception {
 
@@ -108,9 +116,40 @@ public class XMLParserTest {
 
         PublicationsPerYearDto dto =
             xmlParser.extractPublicationsPerYearWithStartAnchorsForTextList(isBigXml,
-                List.of("distributed"));
-        dto.printYearMapInAscendingOrder();
-        dto.printTotalPublications();
+                List.of(
+//                    "distributed computing",
+//                    "distributed computation",
+//                    "distributed calculation",
+//                    "distributed data processing",
+//                    "SOA-based system",
+//                    "distributed programming",
+//                    "distributed system",
+//                    "distributed computer",
+//                    "distributed machine",
+//                    "distributed algorithm",
+//                    "horizontal scalability",
+//                    "teleprocessing",
+//                    "distributed database",
+//                    "distributed rendering",
+//                    "distributed image processing",
+//                    "distributed video processing",
+//                    "distributed processing",
+//                    "distributed analytics",
+//                    "distributed application",
+//                    "distributed architecture"
+                    "distributed"
+                ));
+        // dto.printYearMapInAscendingOrder();
+        // dto.printCSV();
+
+        String filename = "publication.xml";
+        FileOutputStream os = new FileOutputStream(
+            SystemUtils.getUserHome() + "/Downloads/" + filename);
+
+        // SchemaUtil.getMarshaller().marshal(dto.getPublications(), System.out);
+        SchemaUtil.getMarshaller().marshal(dto.getPublications(), os);
+
+        // dto.printTotalPublications();
     }
 
     @Test

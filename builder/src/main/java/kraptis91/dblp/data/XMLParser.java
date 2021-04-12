@@ -3,6 +3,7 @@ package kraptis91.dblp.data;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import kraptis91.dblp.data.model.Publication;
 import kraptis91.dblp.data.model.PublicationsPerYearDto;
 import kraptis91.dblp.data.schema.utils.SchemaUtil;
 import kraptis91.dblp.data.utils.InputStreamUtils;
@@ -97,7 +98,47 @@ public class XMLParser {
         return publications;
     }
 
+    public void printLinesAfterStartAnchor(@NotNull InputStream xmlStream) throws IOException {
 
+        try (BufferedReader reader =
+                 new BufferedReader(new InputStreamReader(xmlStream), 16384)) {
+
+            final StringBuilder stringBuilder = new StringBuilder(100);
+            String line;
+            // int lines = 0;
+            int counter = 0;
+            boolean exitOuterLoop = false;
+
+            // loop though the xml stream
+            while ((line = reader.readLine()) != null) {
+
+                if (line.contains("<person")) {
+                    // String year = line.substring(line.indexOf("<year>") + 6, line.indexOf("</year>"));
+                    // System.out.println(year);
+                    while ((line = reader.readLine()) != null) {
+                        stringBuilder.append(line);
+                        counter++;
+                        if (counter == 1000) {
+                            exitOuterLoop = true;
+                            break;
+                        }
+                    }
+
+                }
+
+                if (exitOuterLoop) {
+                    break;
+                }
+
+                // System.out.println(line);
+                // lines++;
+            }
+
+            // System.out.println("Total lines: " + lines);
+            System.out.println(stringBuilder.toString());
+        }
+
+    }
 
     /**
      * Create the publications per year dto by using BufferedReader.
@@ -239,7 +280,7 @@ public class XMLParser {
                                                                                         @NotEmpty List<String> textList)
         throws IOException {
 
-        final PublicationsPerYearDto publications = new PublicationsPerYearDto();
+        final PublicationsPerYearDto dto = new PublicationsPerYearDto();
 
         try (final BufferedReader reader = new BufferedReader(
             new InputStreamReader(xmlStream), 16384)) {
@@ -248,6 +289,7 @@ public class XMLParser {
             final String yearStartAnchor = "<year>";
             final String yearEndAnchor = "</year>";
             final String titleStartAnchor = "<title>";
+            // final String bookTitleStartAnchor = "<booktitle>";
             // final String titleEndAnchor = "</title>";
             int lines = 0;
 
@@ -256,6 +298,7 @@ public class XMLParser {
                 lines++;
                 // This is the title line
                 if (line.contains(titleStartAnchor)) {
+                    //|| line.contains(bookTitleStartAnchor)) {
 
                     // Check if the title thematic area match
                     for (String text : textList) {
@@ -272,7 +315,11 @@ public class XMLParser {
                                     int yearStart = nextLine.indexOf(yearStartAnchor) + yearStartAnchor.length();
                                     int yearEnd = nextLine.indexOf(yearEndAnchor);
                                     String year = nextLine.substring(yearStart, yearEnd);
-                                    publications.putToYearMap(year);
+                                    dto.putToYearMap(year);
+                                    dto.addPublication(Publication.builder()
+                                        .title(line)
+                                        .year(year)
+                                        .build());
                                     break;
                                 }
 
@@ -286,7 +333,7 @@ public class XMLParser {
             System.out.println("Total number of lines: " + lines);
         }
 
-        return publications;
+        return dto;
     }
 
 }

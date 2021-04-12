@@ -1,5 +1,7 @@
 package kraptis91.dblp.data.schema.utils;
 
+import kraptis91.dblp.data.model.Publication;
+import kraptis91.dblp.data.model.Publications;
 import kraptis91.dblp.data.model.schema.Note;
 import kraptis91.dblp.data.model.schema.PhdThesis;
 
@@ -22,7 +24,8 @@ public final class SchemaUtil {
 
     static {
         try {
-            JAXB_CONTEXT = JAXBContext.newInstance(PhdThesis.class, Note.class);
+            JAXB_CONTEXT = JAXBContext.newInstance(
+                Publications.class, Publication.class, PhdThesis.class, Note.class);
         } catch (JAXBException e) {
             LOGGER.log(Level.SEVERE, null, e);
             throw new ExceptionInInitializerError(e);
