@@ -147,8 +147,8 @@ public class XMLParserTest {
             SystemUtils.getUserHome() + "/Downloads/" + filename);
 
         // SchemaUtil.getMarshaller().marshal(dto.getPublications(), System.out);
-        SchemaUtil.getMarshaller().marshal(dto.getPublications(), os);
-
+        XMLPublicationsWriter writer = new XMLPublicationsWriter(dto.getPublications());
+        writer.createXML(os);
         // dto.printTotalPublications();
     }
 
