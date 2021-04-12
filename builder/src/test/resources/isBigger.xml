@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!DOCTYPE dblp SYSTEM "/dblp-2019-11-22.dtd">
+<!DOCTYPE dblp SYSTEM "/Users/kraptis/Documents/Java Projects/dblp/dblp-data-extractor/builder/src/main/resources/dblp-2019-11-22.dtd">
 <dblp>
     <phdthesis mdate="2016-05-04" key="phd/dk/Heine2010">
         <author>Carmen Heine</author>

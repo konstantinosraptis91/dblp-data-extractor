@@ -13,6 +13,7 @@ public class Publication {
 
     private String title;
     private String year;
+    private String author;
 
     public Publication() {
 
@@ -21,6 +22,7 @@ public class Publication {
     private Publication(Builder builder) {
         setTitle(builder.title);
         setYear(builder.year);
+        setAuthor(builder.author);
     }
 
     public String getTitle() {
@@ -39,12 +41,12 @@ public class Publication {
         this.year = year;
     }
 
-    @Override
-    public String toString() {
-        return "Publication{" +
-            "title='" + title + '\'' +
-            ", year='" + year + '\'' +
-            '}';
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public static Builder builder() {
@@ -55,6 +57,7 @@ public class Publication {
 
         private String title;
         private String year;
+        private String author;
 
         public Builder() {
         }
@@ -69,8 +72,14 @@ public class Publication {
             return this;
         }
 
+        public Builder author(String author) {
+            this.author = author;
+            return this;
+        }
+
         public Publication build() {
             return new Publication(this);
         }
     }
+
 }

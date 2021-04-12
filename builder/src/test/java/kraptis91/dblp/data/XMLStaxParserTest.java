@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.List;
 
@@ -43,10 +44,19 @@ public class XMLStaxParserTest {
         XMLStaxParser xmlParser = new XMLStaxParser();
 
         PublicationsPerYearDto dto =
-            xmlParser.extractPublicationsPerYearWithStAXForTextList(isBigXml,
-                List.of("distributed"));
-        dto.printYearMapInAscendingOrder();
-        dto.printTotalPublications();
+            xmlParser.extractPublicationsPerYearWithStAXForTextList(isSmallXml,
+                List.of("Database"));
+
+        String filename = "publications_stax.xml";
+        FileOutputStream os = new FileOutputStream(
+            SystemUtils.getUserHome() + "/Downloads/" + filename);
+
+        XMLPublicationsWriter writer = new XMLPublicationsWriter(dto.getPublications());
+        // writer.createXML(System.out);
+        writer.createXML(os);
+
+        // dto.printYearMapInAscendingOrder();
+        // dto.printTotalPublications();
     }
 
     @Test
@@ -54,7 +64,7 @@ public class XMLStaxParserTest {
 
         XMLStaxParser xmlParser = new XMLStaxParser();
 
-        int phdthesis = xmlParser.extractTotalPublications(isBigXml);
+        int phdthesis = xmlParser.extractTotalPublications(isSmallXml);
         System.out.println("Total number of phdthesis: " + phdthesis);
     }
 

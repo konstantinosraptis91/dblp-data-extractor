@@ -10,12 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.namespace.QName;
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.*;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -76,6 +77,18 @@ public class XMLStaxParser {
     }
 
     /**
+     * Converts a local resource filename into a path dependent on the runtime
+     * environment.
+     *
+     * @param filename The local path of the resource within /src/main/resources/.
+     * @return An input stream of the file.
+     */
+    private static InputStream filenameToStream(String filename) {
+        return Thread.currentThread().getContextClassLoader()
+            .getResourceAsStream(filename);
+    }
+
+    /**
      * Create the publications per year dto by using StAX.
      *
      * @param xmlStream
@@ -88,13 +101,28 @@ public class XMLStaxParser {
 
         final PublicationsPerYearDto dto = new PublicationsPerYearDto();
 
-        try (BufferedInputStream bis = new BufferedInputStream(xmlStream)) {
+        try (BufferedReader bufferedReader = new BufferedReader(
+            new InputStreamReader(xmlStream, StandardCharsets.ISO_8859_1))) {
+            // new InputStreamReader(
+            // new FileInputStream("/Users/kraptis/Documents/Java Projects/dblp/dblp-data-extractor/builder/src/main/resources/part-of-xml.xml"),
+            // StandardCharsets.ISO_8859_1))) {
+            // "ISO-8859-1"))) {
 
             // create xml event reader for input stream
             final XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
-            final XMLEventReader reader = xmlInputFactory.createXMLEventReader(bis);
+            xmlInputFactory.setXMLResolver(
+                (publicID, systemID, baseURI, namespace) -> {
+                    System.out.println("SystemID: " + systemID);
+                    // return XMLStaxParser.class.getResourceAsStream("/dblp-2019-11-22.dtd");
+                    return XMLStaxParser.filenameToStream(systemID);
+                    // return XMLStaxParser.filenameToStream(
+                    //     "/Users/kraptis/Documents/Java Projects/dblp/dblp-data-extractor/builder/src/main/resources/dblp-2019-11-22.dtd");
+                });
+            final XMLEventReader reader = xmlInputFactory.createXMLEventReader(bufferedReader);
+            // final XMLEventReader reader = xmlInputFactory.createXMLEventReader(xmlStream, StandardCharsets.ISO_8859_1.name());
             XMLEvent xmlEvent;
             Publication publication = null;
+            String author = null;
             int discarded = 0;
 
             // loop though the xml stream
@@ -107,6 +135,19 @@ public class XMLStaxParser {
                     StartElement startElement = xmlEvent.asStartElement();
 
                     switch (startElement.getName().getLocalPart()) {
+
+                        case AUTHOR:
+                            xmlEvent = reader.nextEvent();
+
+                            try {
+                                author = xmlEvent.asCharacters().getData().trim();
+                                System.out.println("Author: " + author);
+
+                            } catch (Exception e) {
+                                // discarded++;
+                                LOGGER.error(e.getMessage());
+                            }
+                            break;
 
                         case TITLE:
                             xmlEvent = reader.nextEvent();
@@ -145,12 +186,15 @@ public class XMLStaxParser {
                     if (ELEMENT_SET.contains(endElement.getName().getLocalPart())
                         && !Objects.isNull(publication)) {
                         dto.putToYearMap(publication.getYear());
+                        publication.setAuthor(author);
+                        dto.addPublication(publication);
                         publication = null;
+                        author = null;
                     }
                 }
             }
 
-            System.out.println("Discarded phdthesis: " + discarded);
+            System.out.println("Discarded elements: " + discarded);
         }
 
         return dto;
