@@ -48,7 +48,7 @@ public class XMLParserTest {
 
         XMLParser xmlParser = new XMLParser();
 
-        String theXML = xmlParser.readNBytesAsString(isBigXml, 1024 * 100 * 1000);
+        String theXML = xmlParser.readNBytesAsString(isBigXml, 1024 * 100);
         // String theXML = xmlParser.readNBytesAsString(isSmallXml, isSmallXml.available());
 
         System.out.println(theXML);
@@ -117,39 +117,39 @@ public class XMLParserTest {
         PublicationsPerYearDto dto =
             xmlParser.extractPublicationsPerYearWithStartAnchorsForTextList(isBigXml,
                 List.of(
-//                    "distributed computing",
-//                    "distributed computation",
-//                    "distributed calculation",
-//                    "distributed data processing",
-//                    "SOA-based system",
-//                    "distributed programming",
-//                    "distributed system",
-//                    "distributed computer",
-//                    "distributed machine",
-//                    "distributed algorithm",
-//                    "horizontal scalability",
-//                    "teleprocessing",
-//                    "distributed database",
-//                    "distributed rendering",
-//                    "distributed image processing",
-//                    "distributed video processing",
-//                    "distributed processing",
-//                    "distributed analytics",
-//                    "distributed application",
-//                    "distributed architecture"
-                    "distributed"
+                    "distributed computing",
+                    "distributed computation",
+                    "distributed calculation",
+                    "distributed data processing",
+                    "SOA-based system",
+                    "distributed programming",
+                    "distributed system",
+                    "distributed computer",
+                    "distributed machine",
+                    "distributed algorithm",
+                    "horizontal scalability",
+                    "teleprocessing",
+                    "distributed database",
+                    "distributed rendering",
+                    "distributed image processing",
+                    "distributed video processing",
+                    "distributed processing",
+                    "distributed analytics",
+                    "distributed application",
+                    "distributed architecture"
+                    // "distributed"
                 ));
-        // dto.printYearMapInAscendingOrder();
+        dto.printYearMapInAscendingOrder();
         // dto.printCSV();
 
         String filename = "publication.xml";
-        FileOutputStream os = new FileOutputStream(
-            SystemUtils.getUserHome() + "/Downloads/" + filename);
+        // FileOutputStream os = new FileOutputStream(
+        //     SystemUtils.getUserHome() + "/Downloads/" + filename);
 
         // SchemaUtil.getMarshaller().marshal(dto.getPublications(), System.out);
-        XMLPublicationsWriter writer = new XMLPublicationsWriter(dto.getPublications());
-        writer.createXML(os);
-        // dto.printTotalPublications();
+        // XMLPublicationsWriter writer = new XMLPublicationsWriter(dto.getPublications());
+        // writer.createXML(os);
+        dto.printTotalPublications();
     }
 
     @Test

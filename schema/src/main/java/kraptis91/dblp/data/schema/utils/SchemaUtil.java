@@ -34,12 +34,12 @@ public final class SchemaUtil {
 
     public static Marshaller getMarshaller() throws JAXBException {
         Marshaller marshaller = JAXB_CONTEXT.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_ENCODING, StandardCharsets.ISO_8859_1.name());
+        marshaller.setProperty(Marshaller.JAXB_ENCODING, StandardCharsets.UTF_8.name());
         // marshaller.setProperty(Marshaller.JAXB_ENCODING, StandardCharsets.UTF_8.name());
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-//        marshaller.setProperty(
-//            "com.sun.xml.bind.xmlHeaders",
-//            "\n<!DOCTYPE Example SYSTEM  \"/Users/kraptis/Documents/Java Projects/dblp/dblp-data-extractor/builder/src/main/resources/dblp-2019-11-22.dtd.dtd\">");
+        // marshaller.setProperty(
+        //    "com.sun.xml.bind.xmlHeaders",
+        //    "\n<!DOCTYPE Example SYSTEM  \"/Users/kraptis/Documents/Java Projects/dblp/dblp-data-extractor/builder/src/main/resources/dblp-2019-11-22.dtd.dtd\">");
         return marshaller;
     }
 

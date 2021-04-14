@@ -31,9 +31,7 @@ public class XMLStaxParserTest {
         System.out.println("FileName: " + fileName);
 
         isBigXml =
-            new FileInputStream(SystemUtils.getUserDir()
-                .getParentFile().getParent() +
-                "/dblp-2021-02-01.xml");
+            new FileInputStream(fileName);
 
         Assertions.assertNotNull(isBigXml);
     }
@@ -78,6 +76,27 @@ public class XMLStaxParserTest {
                 List.of("distributed"));
         dto.printYearMapInAscendingOrder();
         dto.printTotalPublications();
+    }
+
+    @Test
+    public void testExtractPublicationsPerYearWithStAXForTextList3() throws Exception {
+
+        XMLStaxParser xmlParser = new XMLStaxParser();
+
+        PublicationsPerYearDto dto =
+            xmlParser.extractPublicationsPerYearWithStAXForTextList3(isBiggerXml,
+                List.of("Database"));
+
+        String filename = "publications_stax.xml";
+        FileOutputStream os = new FileOutputStream(
+            SystemUtils.getUserHome() + "/Downloads/" + filename);
+
+        XMLPublicationsWriter writer = new XMLPublicationsWriter(dto.getPublications());
+        // writer.createXML(System.out);
+        writer.createXML(os);
+
+        // dto.printYearMapInAscendingOrder();
+        // dto.printTotalPublications();
     }
 
 }

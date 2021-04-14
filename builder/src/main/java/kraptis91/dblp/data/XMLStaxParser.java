@@ -14,9 +14,11 @@ import javax.xml.stream.*;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -113,13 +115,13 @@ public class XMLStaxParser {
             xmlInputFactory.setXMLResolver(
                 (publicID, systemID, baseURI, namespace) -> {
                     System.out.println("SystemID: " + systemID);
-                    // return XMLStaxParser.class.getResourceAsStream("/dblp-2019-11-22.dtd");
-                    return XMLStaxParser.filenameToStream(systemID);
+                    return XMLStaxParser.class.getResourceAsStream("/dblp-2019-11-22.dtd");
+                    //return XMLStaxParser.filenameToStream(systemID);
                     // return XMLStaxParser.filenameToStream(
                     //     "/Users/kraptis/Documents/Java Projects/dblp/dblp-data-extractor/builder/src/main/resources/dblp-2019-11-22.dtd");
                 });
-            final XMLEventReader reader = xmlInputFactory.createXMLEventReader(bufferedReader);
-            // final XMLEventReader reader = xmlInputFactory.createXMLEventReader(xmlStream, StandardCharsets.ISO_8859_1.name());
+            // final XMLEventReader reader = xmlInputFactory.createXMLEventReader(bufferedReader);
+            final XMLEventReader reader = xmlInputFactory.createXMLEventReader(xmlStream, StandardCharsets.ISO_8859_1.name());
             XMLEvent xmlEvent;
             Publication publication = null;
             String author = null;
@@ -145,7 +147,7 @@ public class XMLStaxParser {
 
                             } catch (Exception e) {
                                 // discarded++;
-                                LOGGER.error(e.getMessage());
+                                // LOGGER.error(e.getMessage());
                             }
                             break;
 
@@ -252,6 +254,106 @@ public class XMLStaxParser {
             }
             System.out.println("Discarded phdthesis: " + discarded);
         }
+
+        return dto;
+    }
+
+    /**
+     * Create the publications per year dto by using StAX.
+     *
+     * @param xmlStream
+     * @return
+     * @throws Exception
+     */
+    public PublicationsPerYearDto extractPublicationsPerYearWithStAXForTextList3(@NotNull InputStream xmlStream,
+                                                                                 @NotEmpty List<String> textList)
+        throws Exception {
+
+        final PublicationsPerYearDto dto = new PublicationsPerYearDto();
+        // create xml event reader for input stream
+        final XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+        xmlInputFactory.setXMLResolver(
+            (publicID, systemID, baseURI, namespace) -> {
+                System.out.println("SystemID: " + systemID);
+                // return XMLStaxParser.class.getResourceAsStream("/dblp-2019-11-22.dtd");
+                return XMLStaxParser.filenameToStream(systemID);
+                // return XMLStaxParser.filenameToStream(
+                //    "/Users/kraptis/Documents/Java Projects/dblp/dblp-data-extractor/builder/src/main/resources/dblp-2019-11-22.dtd");
+            });
+        final XMLStreamReader xmlStreamReader = xmlInputFactory.createXMLStreamReader(xmlStream, StandardCharsets.ISO_8859_1.name());
+        Publication publication = null;
+        String author = null;
+        int discarded = 0;
+
+        // loop though the xml stream
+        while (xmlStreamReader.hasNext()) {
+
+            int xmlEvent = xmlStreamReader.next();
+            // check the event is a Document start element
+            if (xmlEvent == XMLStreamConstants.START_ELEMENT) {
+
+                switch (xmlStreamReader.getLocalName()) {
+
+                    case AUTHOR:
+
+                        try {
+                            author = xmlStreamReader.getElementText().trim();
+                            // System.out.println("Author: " + author);
+
+                        } catch (XMLStreamException e) {
+                            // discarded++;
+                            // LOGGER.error(e.getMessage());
+                        }
+                        break;
+
+                    case TITLE:
+
+                        try {
+                            String title = xmlStreamReader.getElementText().trim();
+                            // System.out.println("Title: " + title);
+
+                            for (String text : textList) {
+                                // if (title.contains(text)) {
+                                if (title.toLowerCase().contains(text.trim().toLowerCase())) {
+                                    // if (StringUtils.containsIgnoreCase(title, text)) {
+                                    publication = new Publication();
+                                    publication.setTitle(title);
+                                    break;
+                                }
+                            }
+                        } catch (Exception e) {
+                            discarded++;
+                            // LOGGER.error(e.getMessage());
+                        }
+                        break;
+
+                    case YEAR:
+
+                        if (!Objects.isNull(publication)) {
+                            String year = xmlStreamReader.getElementText().trim();
+                            publication.setYear(year);
+                        }
+                        break;
+                }
+            }
+
+            if (xmlEvent == XMLStreamConstants.END_ELEMENT) {
+
+                if (ELEMENT_SET.contains(xmlStreamReader.getLocalName())
+                    && !Objects.isNull(publication)) {
+
+                    dto.putToYearMap(publication.getYear());
+                    publication.setAuthor(author);
+                    dto.addPublication(publication);
+                    publication = null;
+                    author = null;
+                }
+            }
+        }
+
+        xmlStreamReader.close();
+        xmlStream.close();
+        System.out.println("Discarded elements: " + discarded);
 
         return dto;
     }

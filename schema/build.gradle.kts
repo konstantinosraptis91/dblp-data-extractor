@@ -4,7 +4,8 @@ plugins {
 }
 
 var generatedDir = "${project.buildDir}".plus("generated-sources/xjc")
-var jaxbImplVersion = "2.2.11";
+// var jaxbImplVersion = "2.2.11";
+var jaxbImplVersion = "2.3.0.1";
 var jaxbApiVersion = "2.2.12"
 
 sourceSets.main {

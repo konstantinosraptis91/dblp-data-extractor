@@ -3,6 +3,7 @@ package kraptis91.dblp.data.model;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * @author Konstantinos Raptis [kraptis at unipi.gr] on 4/4/21.
@@ -13,6 +14,7 @@ public class Publication {
 
     private String title;
     private String year;
+    // @XmlTransient
     private String author;
 
     public Publication() {
