@@ -419,18 +419,6 @@ public class XMLStaxParser {
 
             XMLEvent xmlEvent = reader.nextEvent();
 
-//            try {
-//                xmlEvent = reader.nextEvent();
-//            } catch (Exception e) {
-//                System.out.println("here1");
-//                reader.next();
-//                System.out.println("here2");
-//                continue;
-//            }
-//            if (xmlEvent.is == XMLStreamConstants.SPACE) {
-//                continue;
-//            }
-
             if (xmlEvent != null && xmlEvent.isCharacters()) {
                 // String chunk = reader.getElementText()
                 String chunk = xmlEvent.asCharacters().getData()
@@ -473,12 +461,10 @@ public class XMLStaxParser {
                 return XMLStaxParser.filenameToStream(systemID);
             });
         // create xml event reader for input stream
-        final XMLStreamReader streamReader = xmlInputFactory.createXMLStreamReader(xmlStream, StandardCharsets.ISO_8859_1.name());
-        final XMLEventReader eventReader = xmlInputFactory.createXMLEventReader(streamReader);
+        final XMLEventReader eventReader = xmlInputFactory.createXMLEventReader(xmlStream, StandardCharsets.ISO_8859_1.name());
         Publication publication = null;
         String author = null;
         int discarded = 0;
-        int loop = 1;
 
         // loop though the xml stream
         while (eventReader.hasNext()) {
@@ -499,31 +485,24 @@ public class XMLStaxParser {
 
                         } catch (XMLStreamException e) {
                             // discarded++;
-                            LOGGER.error(e.getMessage());
+                            // LOGGER.error(e.getMessage());
                         }
                         break;
 
                     case TITLE:
                         String title = null;
                         XMLEvent pickedEvent = eventReader.peek();
-                        // String data = pickedEvent.asCharacters().getData();
 
                         try {
-
-                            // System.out.println("Data: " + data);
-                            //if (!Objects.isNull(pickedEvent)
-                            //    && pickedEvent.isCharacters()) {
-
                             title = eventReader.getElementText().trim();
-                            // System.out.println("Title: " + title);
+
                         } catch (XMLStreamException e1) {
-                            // } else {
 
                             String chunk = "";
                             if (pickedEvent.isCharacters()) {
                                 chunk = pickedEvent.asCharacters().getData();
                             }
-                            // System.out.println("Chunk: " + chunk);
+
                             try {
                                 title = extractComplexTitle(eventReader);
                                 title = chunk + title;
@@ -531,9 +510,6 @@ public class XMLStaxParser {
                                 discarded++;
                                 // LOGGER.error("e2: " + e2.getMessage());
                             }
-//                            System.out.println("here1");
-//                            title = reader.getText();
-//                            System.out.println("The title: " + title);
                         }
 
                         if (!Objects.isNull(title)
@@ -541,22 +517,19 @@ public class XMLStaxParser {
                             && !title.isBlank()) {
 
                             for (String text : textList) {
-                                // if (title.contains(text)) {
                                 if (title.toLowerCase().contains(text.trim().toLowerCase())) {
-                                    // if (StringUtils.containsIgnoreCase(title, text)) {
                                     publication = new Publication();
                                     publication.setTitle(title);
                                     break;
                                 }
                             }
                         }
-
                         break;
 
                     case YEAR:
 
                         if (!Objects.isNull(publication)) {
-                            String year = streamReader.getElementText().trim();
+                            String year = eventReader.getElementText().trim();
                             publication.setYear(year);
                         }
                         break;
@@ -576,11 +549,9 @@ public class XMLStaxParser {
                     author = null;
                 }
             }
-            loop++;
         }
 
         eventReader.close();
-        streamReader.close();
         xmlStream.close();
         System.out.println("Discarded elements: " + discarded);
 

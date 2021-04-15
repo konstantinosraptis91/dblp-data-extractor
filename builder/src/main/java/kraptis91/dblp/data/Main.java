@@ -36,12 +36,47 @@ public class Main {
                 Main.class.getResourceAsStream("/isBigger.xml");
 
 
-
             XMLStaxParser xmlParser = new XMLStaxParser();
 
             PublicationsPerYearDto dto =
                 xmlParser.extractPublicationsPerYearWithStAXForTextList4(isBigXML,
-                    List.of("distributed"));
+                    // List.of("database", "spezialisierten", "penning"));
+                    List.of(
+                        "distributed architectures",
+                        "distributed computing",
+                        "distributed computation",
+                        "distributed calculation",
+                        "distributed data processing",
+                        "distributed processing",
+                        "SOA-based system",
+                        "distributed programming",
+                        "distributed system",
+                        "distributed computer",
+                        "distributed machine",
+                        "distributed algorithm",
+                        "horizontal scalability",
+                        "teleprocessing",
+                        "distributed database",
+                        "distributed rendering",
+                        "distributed image processing",
+                        "distributed video processing",
+                        "distributed processing",
+                        "distributed analytics",
+                        "distributed application",
+                        "distributed architecture",
+                        "distributed service",
+                        "distributed microservice",
+                        "distributed operating system",
+                        "distributed memory",
+                        "distributed information systems",
+                        "distributed storage system",
+                        "distributed file system",
+                        "distributed multimedia applications",
+                        "distributed framework",
+                        "distributed real-time system",
+                        "distributed ada",
+                        "CORBA"
+                    ));
 
             String filename = "publications_stax.xml";
             FileOutputStream os = new FileOutputStream(
@@ -52,8 +87,9 @@ public class Main {
             writer.createXML(os);
             os.close();
 
-            dto.printYearMapInAscendingOrder();
+            // dto.printYearMapInAscendingOrder();
             dto.printTotalPublications();
+            dto.printCSV();
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
