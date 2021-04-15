@@ -28,4 +28,10 @@
         <ee>https://nbn-resolving.org/urn:nbn:de:hbz:385-1468</ee>
         <ee>http://d-nb.info/971713243</ee>
     </phdthesis>
+    <phdthesis mdate="2002-01-03" key="phd/Bohlen94">
+        <author>Michael H. B&ouml;hlen</author>
+        <title>The Temporal Deductive Database System ChronoLog</title>
+        <year>1994</year>
+        <school>Departement Informatik, ETH Z&uuml;rich</school>
+    </phdthesis>
 </dblp>

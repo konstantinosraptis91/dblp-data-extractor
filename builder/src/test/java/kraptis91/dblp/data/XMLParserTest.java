@@ -49,10 +49,10 @@ public class XMLParserTest {
 
         XMLParser xmlParser = new XMLParser();
 
-        String theXML = xmlParser.readNBytesAsString(isBigXml, 1024 * 1000 * 10);
+        String theXML = xmlParser.readNBytesAsString(isBigXml, 1024 * 1000 * 110);
         // String theXML = xmlParser.readNBytesAsString(isSmallXml, isSmallXml.available());
 
-        String filename = "publications_text.xml";
+        String filename = "publications_text_plain.xml";
         FileOutputStream os = new FileOutputStream(
             SystemUtils.getUserHome() + "/Downloads/" + filename);
         os.write(theXML.getBytes(StandardCharsets.UTF_8));
@@ -123,33 +123,33 @@ public class XMLParserTest {
         PublicationsPerYearDto dto =
             xmlParser.extractPublicationsPerYearWithStartAnchorsForTextList(isBigXml,
                 List.of(
-                    "distributed computing",
-                    "distributed computation",
-                    "distributed calculation",
-                    "distributed data processing",
-                    "SOA-based system",
-                    "distributed programming",
-                    "distributed system",
-                    "distributed computer",
-                    "distributed machine",
-                    "distributed algorithm",
-                    "horizontal scalability",
-                    "teleprocessing",
-                    "distributed database",
-                    "distributed rendering",
-                    "distributed image processing",
-                    "distributed video processing",
-                    "distributed processing",
-                    "distributed analytics",
-                    "distributed application",
-                    "distributed architecture",
-                    "hdfs",
+//                    "distributed computing",
+//                    "distributed computation",
+//                    "distributed calculation",
+//                    "distributed data processing",
+//                    "SOA-based system",
+//                    "distributed programming",
+//                    "distributed system",
+//                    "distributed computer",
+//                    "distributed machine",
+//                    "distributed algorithm",
+//                    "horizontal scalability",
+//                    "teleprocessing",
+//                    "distributed database",
+//                    "distributed rendering",
+//                    "distributed image processing",
+//                    "distributed video processing",
+//                    "distributed processing",
+//                    "distributed analytics",
+//                    "distributed application",
+//                    "distributed architecture",
+//                    "hdfs",
                     // "hadoop",
-                    "scala",
+//                    "scala",
                     // "spark",
-                    "5 v of data",
-                    "java RMI"
-                    // "distributed"
+//                    "5 v of data",
+//                    "java RMI"
+                    "distributed"
 
                 ));
         dto.printYearMapInAscendingOrder();

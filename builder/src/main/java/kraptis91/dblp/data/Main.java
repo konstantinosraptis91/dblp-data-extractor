@@ -32,13 +32,16 @@ public class Main {
             InputStream isSmallXml =
                 Main.class.getResourceAsStream("/sup-part-of-xml.xml");
 
+            InputStream isBiggerXml =
+                Main.class.getResourceAsStream("/isBigger.xml");
+
 
 
             XMLStaxParser xmlParser = new XMLStaxParser();
 
             PublicationsPerYearDto dto =
-                xmlParser.extractPublicationsPerYearWithStAXForTextList3(isSmallXml,
-                    List.of("penning", "spezialisierten"));
+                xmlParser.extractPublicationsPerYearWithStAXForTextList4(isBigXML,
+                    List.of("distributed"));
 
             String filename = "publications_stax.xml";
             FileOutputStream os = new FileOutputStream(
@@ -47,9 +50,10 @@ public class Main {
             XMLPublicationsWriter writer = new XMLPublicationsWriter(dto.getPublications());
             // writer.createXML(System.out);
             writer.createXML(os);
+            os.close();
 
-            // dto.printYearMapInAscendingOrder();
-            // dto.printTotalPublications();
+            dto.printYearMapInAscendingOrder();
+            dto.printTotalPublications();
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }

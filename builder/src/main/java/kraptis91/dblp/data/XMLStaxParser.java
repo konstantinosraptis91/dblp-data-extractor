@@ -411,4 +411,180 @@ public class XMLStaxParser {
         return sb.toString();
     }
 
+    private String extractComplexTitle(XMLEventReader reader) throws XMLStreamException {
+
+        StringBuilder sb = new StringBuilder();
+
+        while (reader.hasNext()) {
+
+            XMLEvent xmlEvent = reader.nextEvent();
+
+//            try {
+//                xmlEvent = reader.nextEvent();
+//            } catch (Exception e) {
+//                System.out.println("here1");
+//                reader.next();
+//                System.out.println("here2");
+//                continue;
+//            }
+//            if (xmlEvent.is == XMLStreamConstants.SPACE) {
+//                continue;
+//            }
+
+            if (xmlEvent != null && xmlEvent.isCharacters()) {
+                // String chunk = reader.getElementText()
+                String chunk = xmlEvent.asCharacters().getData()
+                    .replace("\n", "") // remove line breaks
+                    .replaceFirst("\\s++$", ""); // remove whitespaces on the text end
+                // System.out.println("Chunk: " + chunk);
+                sb.append(chunk);
+            }
+
+            if (xmlEvent != null && xmlEvent.isEndElement()) {
+
+                EndElement endElement = xmlEvent.asEndElement();
+                if (endElement.getName().getLocalPart().equals(TITLE)) {
+
+                    // exit loop
+                    break;
+                }
+            }
+        }
+
+        return sb.toString();
+    }
+
+    /**
+     * Create the publications per year dto by using StAX.
+     *
+     * @param xmlStream
+     * @return
+     * @throws Exception
+     */
+    public PublicationsPerYearDto extractPublicationsPerYearWithStAXForTextList4(@NotNull InputStream xmlStream,
+                                                                                 @NotEmpty List<String> textList)
+        throws Exception {
+
+        final PublicationsPerYearDto dto = new PublicationsPerYearDto();
+        final XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+        xmlInputFactory.setXMLResolver(
+            (publicID, systemID, baseURI, namespace) -> {
+                System.out.println("SystemID: " + systemID);
+                return XMLStaxParser.filenameToStream(systemID);
+            });
+        // create xml event reader for input stream
+        final XMLStreamReader streamReader = xmlInputFactory.createXMLStreamReader(xmlStream, StandardCharsets.ISO_8859_1.name());
+        final XMLEventReader eventReader = xmlInputFactory.createXMLEventReader(streamReader);
+        Publication publication = null;
+        String author = null;
+        int discarded = 0;
+        int loop = 1;
+
+        // loop though the xml stream
+        while (eventReader.hasNext()) {
+
+            XMLEvent xmlEvent = eventReader.nextEvent();
+
+            // check the event is a start element
+            if (xmlEvent.isStartElement()) {
+                StartElement startElement = xmlEvent.asStartElement();
+
+                switch (startElement.getName().getLocalPart()) {
+
+                    case AUTHOR:
+
+                        try {
+                            author = eventReader.getElementText().trim();
+                            // System.out.println("Author: " + author);
+
+                        } catch (XMLStreamException e) {
+                            // discarded++;
+                            LOGGER.error(e.getMessage());
+                        }
+                        break;
+
+                    case TITLE:
+                        String title = null;
+                        XMLEvent pickedEvent = eventReader.peek();
+                        // String data = pickedEvent.asCharacters().getData();
+
+                        try {
+
+                            // System.out.println("Data: " + data);
+                            //if (!Objects.isNull(pickedEvent)
+                            //    && pickedEvent.isCharacters()) {
+
+                            title = eventReader.getElementText().trim();
+                            // System.out.println("Title: " + title);
+                        } catch (XMLStreamException e1) {
+                            // } else {
+
+                            String chunk = "";
+                            if (pickedEvent.isCharacters()) {
+                                chunk = pickedEvent.asCharacters().getData();
+                            }
+                            // System.out.println("Chunk: " + chunk);
+                            try {
+                                title = extractComplexTitle(eventReader);
+                                title = chunk + title;
+                            } catch (XMLStreamException e2) {
+                                discarded++;
+                                // LOGGER.error("e2: " + e2.getMessage());
+                            }
+//                            System.out.println("here1");
+//                            title = reader.getText();
+//                            System.out.println("The title: " + title);
+                        }
+
+                        if (!Objects.isNull(title)
+                            && !title.isEmpty()
+                            && !title.isBlank()) {
+
+                            for (String text : textList) {
+                                // if (title.contains(text)) {
+                                if (title.toLowerCase().contains(text.trim().toLowerCase())) {
+                                    // if (StringUtils.containsIgnoreCase(title, text)) {
+                                    publication = new Publication();
+                                    publication.setTitle(title);
+                                    break;
+                                }
+                            }
+                        }
+
+                        break;
+
+                    case YEAR:
+
+                        if (!Objects.isNull(publication)) {
+                            String year = streamReader.getElementText().trim();
+                            publication.setYear(year);
+                        }
+                        break;
+                }
+            }
+
+            if (xmlEvent.isEndElement()) {
+                EndElement endElement = xmlEvent.asEndElement();
+
+                if (ELEMENT_SET.contains(endElement.getName().getLocalPart())
+                    && !Objects.isNull(publication)) {
+
+                    dto.putToYearMap(publication.getYear());
+                    publication.setAuthor(author);
+                    dto.addPublication(publication);
+                    publication = null;
+                    author = null;
+                }
+            }
+            loop++;
+        }
+
+        eventReader.close();
+        streamReader.close();
+        xmlStream.close();
+        System.out.println("Discarded elements: " + discarded);
+
+        return dto;
+    }
+
 }
