@@ -19,4 +19,11 @@ public class SchemaProperties {
     public static final String TITLE = "title";
     public static final String YEAR = "year";
     public static final String AUTHOR = "author";
+
+    // title sub elements
+//    public static final String SUP = "sup";
+//    public static final String SUB = "sub";
+//    public static final String I = "i";
+//    public static final String TT = "tt";
+
 }

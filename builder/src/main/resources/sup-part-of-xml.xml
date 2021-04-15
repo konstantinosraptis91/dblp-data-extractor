@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE dblp SYSTEM "dblp-2019-11-22.dtd">
+<dblp>
+    <phdthesis mdate="2020-02-12" key="phd/Hoff2002">
+        <author>Gerd Hoff</author>
+        <title>Ein Verfahren zur thematisch spezialisierten Suche im Web und seine Realisierung im Prototypen HomePageSearch</title>
+        <year>2002</year>
+        <school>University of Trier, Germany</school>
+        <ee>http://ubt.opus.hbz-nrw.de/volltexte/2004/146/</ee>
+        <ee>https://nbn-resolving.org/urn:nbn:de:hbz:385-1468</ee>
+        <ee>http://d-nb.info/971713243</ee>
+    </phdthesis>
+    <phdthesis mdate="2019-10-22" key="phd/ethos/Ohadi08">
+        <author>Hamid Ohadi</author>
+        <title>Single Ca<sup>+</sup> ions in a penning trap for applications in quantum information processing.
+        </title>
+        <year>2008</year>
+        <school>Imperial College London, UK</school>
+        <ee>http://ethos.bl.uk/OrderDetails.do?uin=uk.bl.ethos.444138</ee>
+        <note type="source">British Library, EThOS</note>
+    </phdthesis>
+    <phdthesis mdate="2020-02-12" key="phd/Hoff2002">
+        <author>Gerd Hoff</author>
+        <title>Ein Verfahren zur thematisch spezialisierten Suche im Web und seine Realisierung im Prototypen HomePageSearch</title>
+        <year>2002</year>
+        <school>University of Trier, Germany</school>
+        <ee>http://ubt.opus.hbz-nrw.de/volltexte/2004/146/</ee>
+        <ee>https://nbn-resolving.org/urn:nbn:de:hbz:385-1468</ee>
+        <ee>http://d-nb.info/971713243</ee>
+    </phdthesis>
+</dblp>

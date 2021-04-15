@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class XMLParserTest {
@@ -48,10 +49,15 @@ public class XMLParserTest {
 
         XMLParser xmlParser = new XMLParser();
 
-        String theXML = xmlParser.readNBytesAsString(isBigXml, 1024 * 100);
+        String theXML = xmlParser.readNBytesAsString(isBigXml, 1024 * 1000 * 10);
         // String theXML = xmlParser.readNBytesAsString(isSmallXml, isSmallXml.available());
 
-        System.out.println(theXML);
+        String filename = "publications_text.xml";
+        FileOutputStream os = new FileOutputStream(
+            SystemUtils.getUserHome() + "/Downloads/" + filename);
+        os.write(theXML.getBytes(StandardCharsets.UTF_8));
+
+        // System.out.println(theXML);
     }
 
     @Test
@@ -136,19 +142,26 @@ public class XMLParserTest {
                     "distributed processing",
                     "distributed analytics",
                     "distributed application",
-                    "distributed architecture"
+                    "distributed architecture",
+                    "hdfs",
+                    // "hadoop",
+                    "scala",
+                    // "spark",
+                    "5 v of data",
+                    "java RMI"
                     // "distributed"
+
                 ));
         dto.printYearMapInAscendingOrder();
         // dto.printCSV();
 
         String filename = "publication.xml";
-        // FileOutputStream os = new FileOutputStream(
-        //     SystemUtils.getUserHome() + "/Downloads/" + filename);
+        FileOutputStream os = new FileOutputStream(
+             SystemUtils.getUserHome() + "/Downloads/" + filename);
 
         // SchemaUtil.getMarshaller().marshal(dto.getPublications(), System.out);
-        // XMLPublicationsWriter writer = new XMLPublicationsWriter(dto.getPublications());
-        // writer.createXML(os);
+        XMLPublicationsWriter writer = new XMLPublicationsWriter(dto.getPublications());
+        writer.createXML(os);
         dto.printTotalPublications();
     }
 

@@ -1,14 +1,18 @@
 package kraptis91.dblp.data.schema.utils;
 
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.Unmarshaller;
 import kraptis91.dblp.data.model.Publication;
 import kraptis91.dblp.data.model.Publications;
 import kraptis91.dblp.data.model.schema.Note;
 import kraptis91.dblp.data.model.schema.PhdThesis;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
+//import javax.xml.bind.JAXBContext;
+//import javax.xml.bind.JAXBException;
+//import javax.xml.bind.Marshaller;
+//import javax.xml.bind.Unmarshaller;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,8 +38,8 @@ public final class SchemaUtil {
 
     public static Marshaller getMarshaller() throws JAXBException {
         Marshaller marshaller = JAXB_CONTEXT.createMarshaller();
+        // marshaller.setProperty(Marshaller.JAXB_ENCODING, StandardCharsets.ISO_8859_1.name());
         marshaller.setProperty(Marshaller.JAXB_ENCODING, StandardCharsets.UTF_8.name());
-        // marshaller.setProperty(Marshaller.JAXB_ENCODING, StandardCharsets.UTF_8.name());
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         // marshaller.setProperty(
         //    "com.sun.xml.bind.xmlHeaders",

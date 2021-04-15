@@ -81,10 +81,12 @@ public class XMLStaxParserTest {
     @Test
     public void testExtractPublicationsPerYearWithStAXForTextList3() throws Exception {
 
+        System.setProperty("entityExpansionLimit", "10000000");
+
         XMLStaxParser xmlParser = new XMLStaxParser();
 
         PublicationsPerYearDto dto =
-            xmlParser.extractPublicationsPerYearWithStAXForTextList3(isBiggerXml,
+            xmlParser.extractPublicationsPerYearWithStAXForTextList3(isBigXml,
                 List.of("Database"));
 
         String filename = "publications_stax.xml";

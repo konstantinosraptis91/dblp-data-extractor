@@ -1,9 +1,11 @@
 package kraptis91.dblp.data;
 
+import jakarta.xml.bind.JAXBException;
 import kraptis91.dblp.data.model.Publications;
 import kraptis91.dblp.data.schema.utils.SchemaUtil;
 
-import javax.xml.bind.JAXBException;
+// import javax.xml.bind.JAXBException;
+
 import java.io.OutputStream;
 
 /**

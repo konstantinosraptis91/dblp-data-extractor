@@ -14,15 +14,13 @@ import javax.xml.stream.*;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
+import javax.xml.transform.stax.StAXSource;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import static kraptis91.dblp.data.model.schema.SchemaProperties.*;
 
@@ -275,42 +273,66 @@ public class XMLStaxParser {
         xmlInputFactory.setXMLResolver(
             (publicID, systemID, baseURI, namespace) -> {
                 System.out.println("SystemID: " + systemID);
-                // return XMLStaxParser.class.getResourceAsStream("/dblp-2019-11-22.dtd");
                 return XMLStaxParser.filenameToStream(systemID);
-                // return XMLStaxParser.filenameToStream(
-                //    "/Users/kraptis/Documents/Java Projects/dblp/dblp-data-extractor/builder/src/main/resources/dblp-2019-11-22.dtd");
             });
-        final XMLStreamReader xmlStreamReader = xmlInputFactory.createXMLStreamReader(xmlStream, StandardCharsets.ISO_8859_1.name());
+        final XMLStreamReader reader = xmlInputFactory.createXMLStreamReader(xmlStream, StandardCharsets.ISO_8859_1.name());
         Publication publication = null;
         String author = null;
         int discarded = 0;
+        // int loop = 1;
 
         // loop though the xml stream
-        while (xmlStreamReader.hasNext()) {
+        while (reader.hasNext()) {
 
-            int xmlEvent = xmlStreamReader.next();
-            // check the event is a Document start element
+            int xmlEvent = reader.next();
+
+            // check the event is a start element
             if (xmlEvent == XMLStreamConstants.START_ELEMENT) {
 
-                switch (xmlStreamReader.getLocalName()) {
+                switch (reader.getLocalName()) {
 
                     case AUTHOR:
 
                         try {
-                            author = xmlStreamReader.getElementText().trim();
+                            author = reader.getElementText().trim();
                             // System.out.println("Author: " + author);
 
                         } catch (XMLStreamException e) {
                             // discarded++;
-                            // LOGGER.error(e.getMessage());
+                            LOGGER.error(e.getMessage());
                         }
                         break;
 
                     case TITLE:
+                        String title = null;
 
                         try {
-                            String title = xmlStreamReader.getElementText().trim();
-                            // System.out.println("Title: " + title);
+                            // if (reader.hasText()) {
+                            title = reader.getElementText().trim();
+                            System.out.println("Title: " + title);
+                        } catch (Exception e1) {
+                            //} else {
+                            // System.out.println("Title loop: " + loop);
+                            reader.next();
+                            String chunk = reader.getText();
+                            // System.out.println("Title part: " + chunk);
+                            reader.next();
+                            // System.out.println("Current text: " + reader.getText());
+                            try {
+                                title = extractComplexTitle(reader);
+                                title = chunk + title;
+                            } catch (XMLStreamException e2) {
+                                discarded++;
+                                LOGGER.error(e2.getMessage());
+                            }
+//                            System.out.println("here1");
+//                            title = reader.getText();
+//                            System.out.println("The title: " + title);
+                        }
+
+                        if (!Objects.isNull(title)
+                            && !title.isEmpty()
+                            && !title.isBlank()) {
 
                             for (String text : textList) {
                                 // if (title.contains(text)) {
@@ -321,16 +343,14 @@ public class XMLStaxParser {
                                     break;
                                 }
                             }
-                        } catch (Exception e) {
-                            discarded++;
-                            // LOGGER.error(e.getMessage());
                         }
+
                         break;
 
                     case YEAR:
 
                         if (!Objects.isNull(publication)) {
-                            String year = xmlStreamReader.getElementText().trim();
+                            String year = reader.getElementText().trim();
                             publication.setYear(year);
                         }
                         break;
@@ -339,7 +359,7 @@ public class XMLStaxParser {
 
             if (xmlEvent == XMLStreamConstants.END_ELEMENT) {
 
-                if (ELEMENT_SET.contains(xmlStreamReader.getLocalName())
+                if (ELEMENT_SET.contains(reader.getLocalName())
                     && !Objects.isNull(publication)) {
 
                     dto.putToYearMap(publication.getYear());
@@ -349,13 +369,46 @@ public class XMLStaxParser {
                     author = null;
                 }
             }
+            // loop++;
         }
 
-        xmlStreamReader.close();
+        reader.close();
         xmlStream.close();
         System.out.println("Discarded elements: " + discarded);
 
         return dto;
+    }
+
+    private String extractComplexTitle(XMLStreamReader reader) throws XMLStreamException {
+
+        StringBuilder sb = new StringBuilder();
+
+        while (reader.hasNext()) {
+
+            int xmlEvent = reader.next();
+
+            if (xmlEvent == XMLStreamConstants.SPACE) {
+                continue;
+            }
+
+            if (xmlEvent == XMLStreamConstants.CHARACTERS) {
+                String chunk = reader.getText()
+                    .replace("\n", "") // remove line breaks
+                    .replaceFirst("\\s++$", ""); // remove whitespaces on the text end
+                // System.out.println("Chunk: " + chunk);
+                sb.append(chunk);
+            }
+
+            if (xmlEvent == XMLStreamConstants.END_ELEMENT
+                && reader.getLocalName().equals(TITLE)) {
+
+                // exit loop
+                break;
+            }
+
+        }
+
+        return sb.toString();
     }
 
 }
