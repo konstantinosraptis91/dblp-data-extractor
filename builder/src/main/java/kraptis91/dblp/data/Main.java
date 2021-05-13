@@ -3,12 +3,10 @@ package kraptis91.dblp.data;
 import com.google.common.io.Files;
 import kraptis91.dblp.data.model.PublicationsPerYearDto;
 import org.apache.commons.lang3.SystemUtils;
-import org.apache.logging.log4j.core.util.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.List;
@@ -40,7 +38,6 @@ public class Main {
 
             PublicationsPerYearDto dto =
                 xmlParser.extractPublicationsPerYearWithStAXForTextList4(isBigXML,
-                    // List.of("database", "spezialisierten", "penning"));
                     List.of(
                         "distributed architectures",
                         "distributed computing",
@@ -82,14 +79,14 @@ public class Main {
             FileOutputStream os = new FileOutputStream(
                 SystemUtils.getUserHome() + "/Downloads/" + filename);
 
-            XMLPublicationsWriter writer = new XMLPublicationsWriter(dto.getPublications());
+            // XMLPublicationsWriter writer = new XMLPublicationsWriter(dto.getPublications());
             // writer.createXML(System.out);
-            writer.createXML(os);
-            os.close();
+            // writer.createXML(os);
+            // os.close();
 
-            // dto.printYearMapInAscendingOrder();
+            dto.printYearMapInAscendingOrder();
             dto.printTotalPublications();
-            dto.printCSV();
+            // dto.printCSV();
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
